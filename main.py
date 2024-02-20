@@ -12,8 +12,8 @@ def clique(num):
 def egale_clique():
     try:
         global formule
-        # eval permet de d'éxécuter la "formule" en python
-        # par exemple 3+2 sera éxécuter comme si on l'avait écrit directement en dur
+        # eval permet de d'exécuter la "formule" en python
+        # par exemple 3+2 sera exécuté comme si on l'avait écrit directement en dur
         resultat = str(eval(formule))
         equation.set(resultat)
         formule = resultat
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     formule_field.grid(columnspan=3, pady=30, padx=20, ipadx=100, ipady=10)
 
     # lambda pour les boutons permet de retarder l'appel de clique
-    # jusqu'a ce que le bouton soit cliqué
+    # jusqu'à ce que le bouton soit cliqué
     btn_1 = Button(master, text=' 1 ', command=lambda: clique(1), height=2, width=10)
     btn_1.grid(row=2, column=0)
 
