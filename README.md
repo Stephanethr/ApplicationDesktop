@@ -1,35 +1,20 @@
-# Calculatrice Tkinter
+# PassGuardian V0
 
-Une calculatrice basique réalisée en utilisant la bibliothèque Tkinter de Python.
+Un gestionnaire de mots de passe simple et sécurisé.
 
 ## Fonctionnalités
 
-- Les boutons numériques de 0 à 4 permettent de former des nombres dans la formule.
-- Les boutons d'opération (+, -) permettent d'effectuer des opérations.
-- Le bouton "effacer" permet de réinitialiser la formule.
-- Le bouton "=" permet de calculer le résultat de la formule.
+- Stockage de mots de passe.
+- Génération de mots de passe.
+- Affichage des mots de passe.
 
 ## Comment utiliser
 
-1. Exécutez le script.
-2. Utilisez les boutons numériques pour écrire la formule.
-3. Utilisez les boutons d'opération pour effectuer des opérations.
-4. Cliquez sur le bouton "=" pour obtenir le résultat.
-5. Le bouton "effacer" réinitialise la formule.
+1. Exécutez le fichier main.py.
+2. Suivre les instructions affichées dans le terminal.
 
-## Exemple d'utilisation du code
+## Auteurs
 
-```python
-from tkinter import *
-
-# ... (le code de la calculatrice)
-
-if __name__ == "__main__":
-    master = Tk()
-    master.title("Calculatrice")
-    master.geometry("460x315")
-    equation = StringVar()
-
-    # ... (initialisation des composants Tkinter)
-
-    master.mainloop()
+- Thiry Stéphane
+- Mirande Clémentine
+- Michelotti Matthieu
