@@ -5,9 +5,8 @@ from src.chiffrement import *
 
 def connect_db():
     # Construire le chemin absolu vers la base de données
-    print("avant creation de base")
     database_folder = "../database"
-    database_path = os.path.join(database_folder, "passGuardian.db")
+    database_path_file = os.path.join(database_folder, "passGuardian.db")
 
     # Vérifier si le dossier database existe, sinon le créer
     if not os.path.exists(database_folder):
@@ -15,9 +14,9 @@ def connect_db():
 
 
     # Vérifier si la base de données existe sinon la créer
-    if not os.path.exists(database_path):
+    if not os.path.exists(database_path_file):
         # Si la base de données n'existe pas, créer la base de données et la structure de table
-        conn = sqlite3.connect(database_path)
+        conn = sqlite3.connect(database_path_file)
         cursor = conn.cursor()
 
         # Créer la base de données
@@ -27,7 +26,7 @@ def connect_db():
         conn.close()
 
     # Connexion à la base de données
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(database_path_file)
     cursor = conn.cursor()
     return conn, cursor
 
@@ -41,8 +40,6 @@ if __name__ == "__main__":
     save_password(cursor, encrypt_password("password"), "category", "site", 1)
     conn.commit()
     close_db(conn)
-    print(os.path.join("..", "database", "passGuardian.db"))
-
 
 
 
