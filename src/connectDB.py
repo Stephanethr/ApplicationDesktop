@@ -12,21 +12,19 @@ def connect_db():
         os.makedirs(database_folder)
 
 
-    # Vérifier si la base de données existe
+    # Vérifier si la base de données existe sinon la créer
     if not os.path.exists(database_path):
-        print("dans le if")
         # Si la base de données n'existe pas, créer la base de données et la structure de table
         conn = sqlite3.connect(database_path)
-        c = conn.cursor()
-        print(create_db())
-        c.execute('''CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY, value TEXT, category INTEGER, FOREIGN KEY(category) REFERENCES category(id)); CREATE TABLE IF NOT EXISTS category (id INTEGER PRIMARY KEY, name TEXT); CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, username TEXT, master_password TEXT);''')
+        cursor = conn.cursor()
+        cursor.executescript(create_db())
         conn.commit()
         conn.close()
 
     # Connexion à la base de données
     conn = sqlite3.connect(database_path)
-    c = conn.cursor()
-    return conn, c
+    cursor = conn.cursor()
+    return conn, cursor
 
 def close_db(conn):
     # Fermer la connexion à la base de données

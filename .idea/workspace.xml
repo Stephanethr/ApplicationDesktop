@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b4b2525c-9d76-4bb5-90cc-08a4ed7a1744" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/passGuardian.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/passGuardian.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/connectDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/connectDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/createDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/createDB.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +45,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Python.connectDB.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -115,7 +119,7 @@
       <workItem from="1709038395420" duration="4976000" />
       <workItem from="1709044434826" duration="149000" />
       <workItem from="1709044596064" duration="154000" />
-      <workItem from="1709044759350" duration="936000" />
+      <workItem from="1709044759350" duration="1519000" />
     </task>
     <servers />
   </component>
@@ -137,6 +141,6 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PassGuardian$connectDB.coverage" NAME="connectDB Coverage Results" MODIFIED="1709045597806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/PassGuardian$connectDB.coverage" NAME="connectDB Coverage Results" MODIFIED="1709046183454" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
