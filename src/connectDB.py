@@ -4,7 +4,13 @@ from src.createDB import create_db
 def connect_db():
     # Construire le chemin absolu vers la base de données
     print("avant creation de base")
-    database_path = os.path.join("..", "database", "passGuardian.db")
+    database_folder = "../database"
+    database_path = os.path.join(database_folder, "passGuardian.db")
+
+    # Vérifier si le dossier database existe, sinon le créer
+    if not os.path.exists(database_folder):
+        os.makedirs(database_folder)
+
 
     # Vérifier si la base de données existe
     if not os.path.exists(database_path):
