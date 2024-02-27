@@ -1,6 +1,8 @@
 import os
 import sqlite3
-from src.createDB import create_db
+from src.requetes_sql import *
+from src.chiffrement import *
+
 def connect_db():
     # Construire le chemin absolu vers la base de données
     print("avant creation de base")
@@ -17,7 +19,10 @@ def connect_db():
         # Si la base de données n'existe pas, créer la base de données et la structure de table
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
-        cursor.executescript(create_db())
+
+        # Créer la base de données
+        create_db(cursor)
+
         conn.commit()
         conn.close()
 
@@ -31,8 +36,13 @@ def close_db(conn):
     conn.close()
 
 if __name__ == "__main__":
-    conn, c = connect_db()
+    conn, cursor = connect_db()
+    create_user(cursor, "admin", encrypt_password("admin"))
+    save_password(cursor, encrypt_password("password"), "category", "site", 1)
+    conn.commit()
     close_db(conn)
     print(os.path.join("..", "database", "passGuardian.db"))
+
+
 
 
