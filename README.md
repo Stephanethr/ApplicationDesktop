@@ -17,4 +17,4 @@ Un gestionnaire de mots de passe simple et sécurisé.
 
 - Thiry Stéphane
 - Mirande Clémentine
-- Michelotti Matthieu
+- Michelozzi Matthieu
