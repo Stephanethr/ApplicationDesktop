@@ -1,30 +1,42 @@
 from controller import PassController
-
 class Main:
     def __init__(self):
-        self.controller = PassController
+        self.controller = PassController()
 
     def run(self):
         running = True
         while running:
-            print("1. Ajouter un mot de passe")
-            print("2. Récupérer un mot de passe")
-            print("3. Quitter")
+            choices = set()
+            choice = None
+            while choice != "5":
+                print("Créer votre mot de passe avec :")
+                print("1. Des chiffres [123...]")
+                print("2. Des lettres minuscules [abc...]")
+                print("3. Des lettres majuscules [ABC...]")
+                print("4. Des caractères spéciaux")
+                print("5. Terminer la sélection")
+                print("6. Retirer un choix")
+                print("Choix actuels : ", choices if choices else "Aucun")
+                choice = input("Entrez le numéro de votre choix : ")
 
-            choice = input("Que voulez-vous faire ? ")
+                if choice == "6":
+                    remove_choice = input("Entrez le numéro du choix à retirer : ")
+                    choices.discard(remove_choice)
+                elif choice != "5":
+                    choices.add(choice)
 
-            if choice == "1":
-                username = input("Nom d'utilisateur : ")
-                password = input("Mot de passe : ")
-                "self.controller.add_password(username, password)"
-            elif choice == "2":
-                username = input("Nom d'utilisateur : ")
-                "password = self.controller.get_password(username)"
-                print("Mot de passe : ", password)
-            elif choice == "3":
-                running = False
-            else:
-                print("Choix invalide")
+            if choices:
+                password_length = input("Nombre de caractères : ")
+                password_count = input("Nombre de mots de passe : ")
+
+                answers = {
+                    'password_options': list(choices),
+                    'password_length': password_length,
+                    'password_count': password_count,
+                }
+
+                self.controller.generate_passwords(answers)
+                self.controller.print_user_inputs()
 
 if __name__ == "__main__":
     app = Main()
