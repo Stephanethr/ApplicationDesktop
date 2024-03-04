@@ -9,7 +9,9 @@ class Main:
             choices = set()
             choice = None
             while choice != "5":
+                print("\n" + "=" * 30)
                 print("Créer votre mot de passe avec :")
+                print("=" * 30)
                 print("1. Des chiffres [123...]")
                 print("2. Des lettres minuscules [abc...]")
                 print("3. Des lettres majuscules [ABC...]")
