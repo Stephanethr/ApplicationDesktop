@@ -16,10 +16,14 @@ class Main:
                 print("4. Des caractères spéciaux")
                 print("5. Terminer la sélection")
                 print("6. Retirer un choix")
+                print("7. Quitter l'application")
                 print("Choix actuels : ", choices if choices else "Aucun")
+
                 choice = input("Entrez le numéro de votre choix : ")
 
-                if choice == "6":
+                if choice == "7":
+                    return
+                elif choice == "6":
                     remove_choice = input("Entrez le numéro du choix à retirer : ")
                     choices.discard(remove_choice)
                 elif choice != "5":
