@@ -9,17 +9,22 @@ class Main:
             choices = set()
             choice = None
             while choice != "5":
+                print("\n" + "=" * 30)
                 print("Créer votre mot de passe avec :")
+                print("=" * 30)
                 print("1. Des chiffres [123...]")
                 print("2. Des lettres minuscules [abc...]")
                 print("3. Des lettres majuscules [ABC...]")
                 print("4. Des caractères spéciaux")
                 print("5. Terminer la sélection")
                 print("6. Retirer un choix")
+                print("7. Quitter l'application")
                 print("Choix actuels : ", choices if choices else "Aucun")
                 choice = input("Entrez le numéro de votre choix : ")
 
-                if choice == "6":
+                if choice == "7":
+                    return
+                elif choice == "6":
                     remove_choice = input("Entrez le numéro du choix à retirer : ")
                     choices.discard(remove_choice)
                 elif choice != "5":
