@@ -1,11 +1,31 @@
-from controller import PassController
+from PassController import PassController
+
+
 class Main:
     def __init__(self):
         self.controller = PassController()
+        self.user_id = None
 
     def run(self):
         running = True
         while running:
+            print("=" * 30)
+            print("PassGuardian")
+            print("=" * 30 + "\n")
+            choice = input("Se connecter (1), s'enregistrer (2) : ")
+            if choice == "2":
+                print("=" * 30)
+                print("Création de compte")
+                print("=" * 30 + "\n")
+                username = input("Nom d'utilisateur : ")
+                password = input("Mot de passe : ")
+                self.controller.create_user(username)
+                self.user_id = self.controller.get_user(username)
+            else:
+                username = input("Nom d'utilisateur : ")
+                password = input("Mot de passe : ")
+                self.user_id = self.controller.get_user(username)
+            print(self.user_id)
             choices = set()
             choice = None
             while choice != "5":
@@ -40,8 +60,9 @@ class Main:
                     'password_count': password_count,
                 }
 
-                self.controller.generate_passwords(answers)
+                self.controller.generate_password(answers)
                 self.controller.print_user_inputs()
+
 
 if __name__ == "__main__":
     app = Main()
