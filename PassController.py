@@ -15,17 +15,16 @@ class PassController:
     def print_user_inputs(self):
         print(self.user_inputs)
 
-    def create_user(self, username):
+    def create_user(self, username, password):
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
-        requetes_sql.create_user(conn.cursor, username)
+        requetes_sql.create_user_bdd(conn.cursor, username, password)
         conn.commit()
         conn.close()
 
-    def get_user(self, username):
+    def get_user(self, username, password):
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
-        user_id = requetes_sql.get_user(conn.cursor, username)
+        user = requetes_sql.get_user_bdd(conn.cursor, username, password)
         conn.close()
-        return user_id
-
+        return user

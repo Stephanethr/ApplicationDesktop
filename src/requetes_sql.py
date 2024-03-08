@@ -11,16 +11,14 @@ def save_password(cursor, value, categoryName, siteName, userID):
     """, (value, categoryName, siteName, userID))
 
 
-# Pour l'instant on ne prend que le username pour tester.
-def create_user(cursor, username):
+def create_user_bdd(cursor, username, password):
     cursor.execute("""
-    INSERT INTO user (username) VALUES (?);
-    """, (username,))
+    INSERT INTO user (username, master_password) VALUES (?, ?);
+    """, (username, password))
 
 
-# Pour l'instant on ne prend que le username pour tester.
-def get_user(cursor, username):
+def get_user_bdd(cursor, username, password):
     cursor.execute("""
-    SELECT username, master_password FROM user WHERE username = ?;
-    """, (username,))
+    SELECT username, master_password FROM user WHERE username = ? AND master_password = ?;
+    """, (username, password))
     return cursor.fetchone()

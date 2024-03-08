@@ -52,7 +52,7 @@ if __name__ == "__main__":
     connDB = ConnexionDB()
     connDB.connect_db()
 
-    create_user(connDB.get_cursor(), "admin", chiffrement.encrypt_password("admin"))
+    create_user_bdd(connDB.get_cursor(), "admin", chiffrement.encrypt_password("admin"))
     save_password(connDB.get_cursor(), chiffrement.encrypt_password("password"), "category", "site", 1)
     connDB.commit()
     connDB.close()

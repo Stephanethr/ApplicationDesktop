@@ -4,7 +4,7 @@ from PassController import PassController
 class Main:
     def __init__(self):
         self.controller = PassController()
-        self.user_id = None
+        self.user = None
 
     def run(self):
         running = True
@@ -19,13 +19,13 @@ class Main:
                 print("=" * 30 + "\n")
                 username = input("Nom d'utilisateur : ")
                 password = input("Mot de passe : ")
-                self.controller.create_user(username)
-                self.user_id = self.controller.get_user(username)
+                self.controller.create_user(username, password)
+                self.user = self.controller.get_user(username, password)
             else:
                 username = input("Nom d'utilisateur : ")
                 password = input("Mot de passe : ")
-                self.user_id = self.controller.get_user(username)
-            print(self.user_id)
+                self.user = self.controller.get_user(username, password)
+            print(self.user)
             choices = set()
             choice = None
             while choice != "5":
