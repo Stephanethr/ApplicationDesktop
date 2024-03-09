@@ -17,7 +17,7 @@ class ConnexionDB:
 
     def connect_db(self):
         # Construire le chemin vers la base de données
-        database_folder = "../database"
+        database_folder = os.path.join(os.path.dirname(__file__), "../database")
         database_path_file = os.path.join(database_folder, "passGuardian.db")
 
         # Vérifier si le dossier database existe, sinon le créer
