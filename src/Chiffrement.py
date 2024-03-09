@@ -1,4 +1,6 @@
 from cryptography.fernet import Fernet
+
+
 class Chiffrement:
     def __init__(self):
         self.key = Fernet.generate_key()

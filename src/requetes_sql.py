@@ -19,6 +19,17 @@ def create_user_bdd(cursor, username, password):
 
 def get_user_bdd(cursor, username, password):
     cursor.execute("""
-    SELECT username, master_password FROM user WHERE username = ? AND master_password = ?;
+    SELECT id,username FROM user WHERE username = ? AND master_password = ?;
     """, (username, password))
     return cursor.fetchone()
+
+def get_passwords(cursor, userID):
+    cursor.execute("""
+    SELECT * FROM password WHERE userID = ?;
+    """, (userID,))
+    return cursor.fetchone()
+
+def delete_password(cursor, password_id):
+    cursor.execute("""
+    DELETE FROM password WHERE id = ?;
+    """, (password_id,))
