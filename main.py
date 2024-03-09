@@ -22,17 +22,15 @@ class Main:
             print("=" * 30 + "\n")
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
-            password = hashlib.sha256(password.encode('utf-8'))
-            password = password.hexdigest()
+            password = hashlib.sha256(password.encode('utf-8')).hexdigest()
             self.controller.create_user(username, password)
             self.user = self.controller.get_user(username, password)
         else:
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
-            password = hashlib.sha256(password.encode('utf-8'))
-            password = password.hexdigest()
+            password = hashlib.sha256(password.encode('utf-8')).hexdigest()
             self.user = self.controller.get_user(username, password)
-        self.key = password
+        self.key = bytes.fromhex(password)
     def main_menu(self):
         choice = None
         while self.running:

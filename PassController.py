@@ -38,12 +38,12 @@ class PassController:
         conn.close()
         return user
 
-    def save_password(self, value, categoryName, siteName, userID, key):
+    def save_password(self, password, categoryName, siteName, userID, key):
         chiffrement = Chiffrement.Chiffrement(key)
-        iv, value = chiffrement.encrypt_password(value)
+        cipher = chiffrement.encrypt_password(password)
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
-        requetes_sql.save_password(conn.cursor, value, iv, categoryName, siteName, userID)
+        requetes_sql.save_password(conn.cursor, cipher, categoryName, siteName, userID)
         conn.commit()
         conn.close()
 
