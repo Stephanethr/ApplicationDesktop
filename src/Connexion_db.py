@@ -48,7 +48,6 @@ class ConnexionDB:
 
 
 if __name__ == "__main__":
-    chiffrement = Chiffrement()
     connDB = ConnexionDB()
     connDB.connect_db()
 

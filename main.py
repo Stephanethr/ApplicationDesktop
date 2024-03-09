@@ -1,12 +1,15 @@
 from PassController import PassController
+import hashlib
 
 
 class Main:
     def __init__(self):
         self.controller = PassController()
         self.user = None
+        self.key = None
         self.isConnected = False
         self.running = True
+
 
     def connect_menu(self):
         print("=" * 30)
@@ -19,13 +22,17 @@ class Main:
             print("=" * 30 + "\n")
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
+            password = hashlib.sha256(password.encode('utf-8'))
+            password = password.hexdigest()
             self.controller.create_user(username, password)
             self.user = self.controller.get_user(username, password)
         else:
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
+            password = hashlib.sha256(password.encode('utf-8'))
+            password = password.hexdigest()
             self.user = self.controller.get_user(username, password)
-
+        self.key = password
     def main_menu(self):
         choice = None
         while self.running:
@@ -45,7 +52,7 @@ class Main:
                 value = input("Entrez le mot de passe : ")
                 categoryName = input("Entrez la catégorie : ")
                 siteName = input("Entrez le nom du site : ")
-                self.controller.save_password(value, categoryName, siteName, self.user[0])
+                self.controller.save_password(value, categoryName, siteName, self.user[0], self.key)
             elif choice == "3":
                 print(self.controller.get_passwords(self.user[0]))
             elif choice == "4":
@@ -77,10 +84,10 @@ class Main:
             if choice == "7":
                 return
             elif choice == "6":
-                remove_choice = input("Entrez le numéro du choix à retirer : ")
+                remove_choice = int(input("Entrez le numéro du choix à retirer : "))
                 choices.discard(remove_choice)
             elif choice != "5":
-                choices.add(choice)
+                 choices.add(int(choice))
 
         if choices:
             password_length = input("Nombre de caractères : ")
@@ -88,8 +95,8 @@ class Main:
 
             answers = {
                 'password_options': list(choices),
-                'password_length': password_length,
-                'password_count': password_count,
+                'password_length': int(password_length),
+                'password_count': int(password_count),
             }
 
             self.controller.generate_password(answers)
@@ -101,7 +108,6 @@ class Main:
             self.isConnected = True
             print("Connecté en tant que", self.user)
             self.main_menu()
-
 
 if __name__ == "__main__":
     app = Main()
