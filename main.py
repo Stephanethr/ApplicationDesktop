@@ -45,10 +45,10 @@ class Main:
                 if choice == "7":
                     return
                 elif choice == "6":
-                    remove_choice = input("Entrez le numéro du choix à retirer : ")
+                    remove_choice = int(input("Entrez le numéro du choix à retirer : "))
                     choices.discard(remove_choice)
                 elif choice != "5":
-                    choices.add(choice)
+                    choices.add(int(choice))
 
             if choices:
                 password_length = input("Nombre de caractères : ")
@@ -56,8 +56,8 @@ class Main:
 
                 answers = {
                     'password_options': list(choices),
-                    'password_length': password_length,
-                    'password_count': password_count,
+                    'password_length': int(password_length),
+                    'password_count': int(password_count),
                 }
 
                 self.controller.generate_password(answers)
