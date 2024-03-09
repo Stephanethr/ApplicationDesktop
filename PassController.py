@@ -31,16 +31,16 @@ class PassController:
         conn.commit()
         conn.close()
 
-    def get_user(self, username, password):
+    def get_user(self, username, password, key):
+        self.createChiffrement(key)
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
         user = requetes_sql.get_user_bdd(conn.cursor, username, password)
         conn.close()
         return user
 
-    def save_password(self, password, categoryName, siteName, userID, key):
-        chiffrement = Chiffrement.Chiffrement(key)
-        cipher = chiffrement.encrypt_password(password)
+    def save_password(self, password, categoryName, siteName, userID):
+        cipher = self.chiffrement.encrypt_password(password)
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
         requetes_sql.save_password(conn.cursor, cipher, categoryName, siteName, userID)
@@ -50,8 +50,13 @@ class PassController:
     def get_passwords(self, userID):
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
-        requetes_sql.get_passwords(conn.cursor, userID)
+        res = requetes_sql.get_passwords(conn.cursor, userID)
         conn.close()
+        encrypted = [elt[1] for elt in res]
+        for i in range(len(encrypted)):
+            encrypted[i] = self.chiffrement.decrypt(encrypted[i].decode())
+            res[i] = (res[i][0], encrypted[i], res[i][2], res[i][3])
+        return res
 
     def delete_password(self, password_id):
         conn = Connexion_db.ConnexionDB()
@@ -59,3 +64,6 @@ class PassController:
         requetes_sql.delete_password(conn.cursor, password_id)
         conn.commit()
         conn.close()
+
+    def createChiffrement(self, password):
+        self.chiffrement = Chiffrement.Chiffrement(password)

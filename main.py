@@ -6,7 +6,6 @@ class Main:
     def __init__(self):
         self.controller = PassController()
         self.user = None
-        self.key = None
         self.isConnected = False
         self.running = True
 
@@ -23,14 +22,15 @@ class Main:
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
             password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            key = bytes.fromhex(password)
             self.controller.create_user(username, password)
-            self.user = self.controller.get_user(username, password)
+            self.user = self.controller.get_user(username, password, key)
         else:
             username = input("Nom d'utilisateur : ")
             password = input("Mot de passe : ")
             password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            self.user = self.controller.get_user(username, password)
-        self.key = bytes.fromhex(password)
+            key = bytes.fromhex(password)
+            self.user = self.controller.get_user(username, password, key )
     def main_menu(self):
         choice = None
         while self.running:
@@ -50,7 +50,7 @@ class Main:
                 value = input("Entrez le mot de passe : ")
                 categoryName = input("Entrez la catégorie : ")
                 siteName = input("Entrez le nom du site : ")
-                self.controller.save_password(value, categoryName, siteName, self.user[0], self.key)
+                self.controller.save_password(value, categoryName, siteName, self.user[0])
             elif choice == "3":
                 print(self.controller.get_passwords(self.user[0]))
             elif choice == "4":

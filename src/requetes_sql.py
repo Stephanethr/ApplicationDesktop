@@ -25,9 +25,9 @@ def get_user_bdd(cursor, username, password):
 
 def get_passwords(cursor, userID):
     cursor.execute("""
-    SELECT * FROM password WHERE userID = ?;
+    SELECT id, password, categoryName, siteName FROM password WHERE userID = ?;
     """, (userID,))
-    return cursor.fetchone()
+    return cursor.fetchall()
 
 def delete_password(cursor, password_id):
     cursor.execute("""
