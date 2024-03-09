@@ -57,8 +57,6 @@ class Main:
                 self.running = False
                 return
 
-
-
     def generate_password_menu(self):
         choices = set()
         choice = None
