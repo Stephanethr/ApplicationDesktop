@@ -7,7 +7,6 @@ from src import Generateur_mdp
 class PassController:
     def __init__(self):
         self.user_inputs = {}
-        self.mdp_genere = []
         self.generation = Generateur_mdp.Generation()
         self.chiffrement = None
 
@@ -17,9 +16,8 @@ class PassController:
         if (self.generation.longeur_valide(self.user_inputs['password_length']) &
                 self.generation.choix_utilisateur(self.user_inputs['password_options'])):
 
-            self.mdp_genere.append(self.generation.generation_mdp(self.user_inputs['password_count']))
-            print(self.mdp_genere)
-            self.mdp_genere.clear()
+            mdp_genere = self.generation.generation_mdp(self.user_inputs['password_count'])
+            print(mdp_genere)
 
     def print_user_inputs(self):
         print(self.user_inputs)

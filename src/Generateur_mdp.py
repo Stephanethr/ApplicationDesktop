@@ -8,6 +8,8 @@ class Generation:
     LONGEUR_MAX_MDP = 21
     LONGEUR_MIN_CHOIX = 1
     LONGEUR_MAX_CHOIX = 4
+    LTR_MIN_MIN_MDP = 3
+    LTR_MAJ_MIN_MDP = 3
     CHIFFRE_MIN_MDP = 3
     SYMBOLE_MIN_MDP = 3
 
@@ -19,6 +21,8 @@ class Generation:
     alphabet = ''
     nbr_chiffre_obligatoire = 0
     nbr_symbole_obligatoire = 0
+    nbr_lettre_min_obligatoire = 0
+    nbr_lettre_maj_obligatoire = 0
 
     def __init__(self):
         self.lettre_min = string.ascii_lowercase
@@ -76,7 +80,7 @@ class Generation:
                 valide = False
         return valide
 
-    def choix_utilisateur(self, charactere_voulue: list[int]):
+    def choix_utilisateur(self, charactere_voulue: list[int]) -> bool:
         """
             Crée un alphabet personnalisé selon les choix entré par l'utilisateur.
 
@@ -92,8 +96,9 @@ class Generation:
             Par exemple, pour créer un alphabet contenant des lettres minuscules et des chiffres,
             l'utilisateur doit fournir la liste [1, 3].
 
-            :param charactere_voulue: Liste d'entiers représentant les types de caractères à inclure.
-            :type charactere_voulue: list[int]
+            :param: charactere_voulue: Liste d'entiers représentant les types de caractères à inclure.
+            :type: charactere_voulue: list[int]
+            :rtype: bool
         """
         conditions = {
             1: self.lettre_min,
@@ -109,40 +114,78 @@ class Generation:
                 alphabet = alphabet + conditions[condition]
             self.alphabet = alphabet
 
+            if any(lettre_min in self.lettre_min for lettre_min in self.alphabet):
+                self.nbr_lettre_min_obligatoire = self.LTR_MIN_MIN_MDP
+
+            if any(lettre_maj in self.lettre_maj for lettre_maj in self.alphabet):
+                self.nbr_lettre_maj_obligatoire = self.LTR_MAJ_MIN_MDP
+
             if any(chiffre in self.chiffres for chiffre in self.alphabet):
                 self.nbr_chiffre_obligatoire = self.CHIFFRE_MIN_MDP
+
             if any(symbole in self.symboles for symbole in self.alphabet):
                 self.nbr_symbole_obligatoire = self.SYMBOLE_MIN_MDP
+
         else:
             valide = False
 
         return valide
 
-    def generation_mdp(self, nbr_mdp: int) -> str:
-        mot_de_passe = ''
-        chiffre_generer = 0
-        symbole_generer = 0
+    def mot_de_passe_valide(self, mot_de_passe: str) -> str:
+        """
+            Générer les caractères obligatoires restants si nécessaire
+
+            :param mot_de_passe: mot de passe généré
+            :type mot_de_passe: str
+            :return: Choix valide ou non
+            :rtype: str
+        """
+
+        for i in range(self.nbr_lettre_min_obligatoire - mot_de_passe.count(self.lettre_min)):
+            mot_de_passe += secrets.choice(self.lettre_min)
+
+        for i in range(self.nbr_lettre_maj_obligatoire - mot_de_passe.count(self.lettre_maj)):
+            mot_de_passe += secrets.choice(self.lettre_maj)
+
+        for i in range(self.nbr_chiffre_obligatoire - mot_de_passe.count(self.chiffres)):
+            mot_de_passe += secrets.choice(self.chiffres)
+
+        for i in range(self.nbr_symbole_obligatoire - mot_de_passe.count(self.symboles)):
+            mot_de_passe += secrets.choice(self.symboles)
+
+        return mot_de_passe
+
+    def generation_mdp(self, nbr_mdp: int) -> list[str]:
+        """
+                Génére le nombre de mot de passe voulue en fonction des
+                conditions rentrer au préalable par l'utilisateur (1 : lettre min, 2: lettre maj,...)
+
+                :param nbr_mdp: le nombre de mot de passe à générer
+                :type nbr_mdp: int
+                :return: Liste de mots de passe généré
+                :rtype: list[str]
+        """
+
+        mots_de_passe = []
 
         for i in range(nbr_mdp):
+            mot_de_passe = ''
 
-            longeur_mdp = self.longeur_mdp - self.nbr_chiffre_obligatoire - self.nbr_symbole_obligatoire
+            longeur_mdp = (self.longeur_mdp - self.nbr_chiffre_obligatoire - self.nbr_symbole_obligatoire -
+                           self.nbr_lettre_min_obligatoire - self.nbr_lettre_maj_obligatoire)
 
             for j in range(longeur_mdp):
-                mot_de_passe += ''.join(secrets.choice(self.alphabet))
+                mot_de_passe += secrets.choice(self.alphabet)
 
-            while chiffre_generer < self.nbr_chiffre_obligatoire & symbole_generer < self.nbr_symbole_obligatoire:
-                if chiffre_generer < self.nbr_chiffre_obligatoire and self.chiffres:
-                    mot_de_passe += ''.join(secrets.choice(self.chiffres))
-                    chiffre_generer += 1
+            mot_de_passe = self.mot_de_passe_valide(mot_de_passe)
 
-                if symbole_generer < self.nbr_symbole_obligatoire and self.symboles:
-                    mot_de_passe += ''.join(secrets.choice(self.symboles))
-                    symbole_generer += 1
-
-            """mélanger du mot de passe"""
+            # Mélanger le mdp
             liste_mot_de_passe = list(mot_de_passe)
             random.shuffle(liste_mot_de_passe)
             mot_de_passe = ''.join(liste_mot_de_passe)
 
-        return mot_de_passe
+            mots_de_passe.append(mot_de_passe)
+
+        return mots_de_passe
+
 
