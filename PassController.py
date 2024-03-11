@@ -17,7 +17,7 @@ class PassController:
                 self.generation.choix_utilisateur(self.user_inputs['password_options'])):
 
             mdp_genere = self.generation.generation_mdp(self.user_inputs['password_count'])
-            return mdp_genere[0]
+            return mdp_genere
 
     def print_user_inputs(self):
         print(self.user_inputs)
