@@ -9,7 +9,6 @@ class Main:
         self.isConnected = False
         self.running = True
 
-
     def connect_menu(self):
         print("=" * 30)
         print("PassGuardian")
@@ -30,9 +29,9 @@ class Main:
             password = input("Mot de passe : ")
             password = hashlib.sha256(password.encode('utf-8')).hexdigest()
             key = bytes.fromhex(password)
-            self.user = self.controller.get_user(username, password, key )
+            self.user = self.controller.get_user(username, password, key)
+
     def main_menu(self):
-        choice = None
         while self.running:
             print("\n" + "=" * 30)
             print("Bienvenue dans PassGuardian")
@@ -47,10 +46,10 @@ class Main:
             if choice == "1":
                 self.generate_password_menu()
             elif choice == "2":
-                value = input("Entrez le mot de passe : ")
+                password = input("Entrez le mot de passe : ")
                 categoryName = input("Entrez la catégorie : ")
                 siteName = input("Entrez le nom du site : ")
-                self.controller.save_password(value, categoryName, siteName, self.user[0])
+                self.controller.save_password(password, categoryName, siteName, self.user[0])
             elif choice == "3":
                 print(self.controller.get_passwords(self.user[0]))
             elif choice == "4":
@@ -97,7 +96,7 @@ class Main:
                 'password_count': int(password_count),
             }
 
-            self.controller.generate_password(answers)
+            print(self.controller.generate_password(answers))
             self.controller.print_user_inputs()
 
     def run(self):
@@ -106,6 +105,7 @@ class Main:
             self.isConnected = True
             print("Connecté en tant que", self.user)
             self.main_menu()
+
 
 if __name__ == "__main__":
     app = Main()
