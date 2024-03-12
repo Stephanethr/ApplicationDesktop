@@ -13,7 +13,7 @@ class PassController:
     def generate_password(self, answers):
         # enregistre les entrées de l'utilisateur dans une liste
         self.user_inputs = answers
-        if (self.generation.longeur_valide(self.user_inputs['password_length']) &
+        if (self.generation.longueur_valide(self.user_inputs['password_length']) &
                 self.generation.choix_utilisateur(self.user_inputs['password_options'])):
 
             mdp_genere = self.generation.generation_mdp(self.user_inputs['password_count'])
@@ -23,6 +23,7 @@ class PassController:
         print(self.user_inputs)
 
     def create_user(self, username, password):
+        # déplacer conn dans requetes_sql
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
         requetes_sql.create_user_bdd(conn.cursor, username, password)
@@ -37,11 +38,11 @@ class PassController:
         conn.close()
         return user
 
-    def save_password(self, password, categoryName, siteName, userID):
+    def save_password(self, login, password, categoryName, siteName, userID):
         cipher = self.chiffrement.encrypt_password(password)
         conn = Connexion_db.ConnexionDB()
         conn.connect_db()
-        requetes_sql.save_password(conn.cursor, cipher, categoryName, siteName, userID)
+        requetes_sql.save_password(conn.cursor, login, cipher, categoryName, siteName, userID)
         conn.commit()
         conn.close()
 
@@ -50,10 +51,10 @@ class PassController:
         conn.connect_db()
         res = requetes_sql.get_passwords(conn.cursor, userID)
         conn.close()
-        encrypted = [elt[1] for elt in res]
+        encrypted = [elt[2] for elt in res]
         for i in range(len(encrypted)):
             encrypted[i] = self.chiffrement.decrypt(encrypted[i].decode())
-            res[i] = (res[i][0], encrypted[i], res[i][2], res[i][3])
+            res[i] = (res[i][0], res[i][1], encrypted[i], res[i][3], res[i][4])
         return res
 
     def delete_password(self, password_id):

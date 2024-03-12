@@ -46,10 +46,11 @@ class Main:
             if choice == "1":
                 self.generate_password_menu()
             elif choice == "2":
+                login = input("Entrez le login : ")
                 password = input("Entrez le mot de passe : ")
                 categoryName = input("Entrez la catégorie : ")
                 siteName = input("Entrez le nom du site : ")
-                self.controller.save_password(password, categoryName, siteName, self.user[0])
+                self.controller.save_password(login, password, categoryName, siteName, self.user[0])
             elif choice == "3":
                 print(self.controller.get_passwords(self.user[0]))
             elif choice == "4":

@@ -1,14 +1,17 @@
+# Créer classe
+
+
 def create_db(cursor):
     cursor.executescript("""
-    CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT, categoryName TEXT, siteName TEXT, userID INTEGER, FOREIGN KEY(userID) REFERENCES user(id));
+    CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, password TEXT, categoryName TEXT, siteName TEXT, userID INTEGER, FOREIGN KEY(userID) REFERENCES user(id));
     CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, master_password TEXT);
     """)
 
 
-def save_password(cursor, password, categoryName, siteName, userID):
+def save_password(cursor, login, password, categoryName, siteName, userID):
     cursor.execute("""
-    INSERT INTO password (password, categoryName, siteName, userID) VALUES (? , ? , ? , ?);
-    """, (password, categoryName, siteName, userID))
+    INSERT INTO password (login, password, categoryName, siteName, userID) VALUES (? , ? , ? , ? , ?);
+    """, (login, password, categoryName, siteName, userID))
 
 
 def create_user_bdd(cursor, username, password):
@@ -25,7 +28,7 @@ def get_user_bdd(cursor, username, password):
 
 def get_passwords(cursor, userID):
     cursor.execute("""
-    SELECT id, password, categoryName, siteName FROM password WHERE userID = ?;
+    SELECT id, login, password, categoryName, siteName FROM password WHERE userID = ?;
     """, (userID,))
     return cursor.fetchall()
 
