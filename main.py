@@ -55,7 +55,7 @@ class Main:
                 print(self.controller.get_passwords(self.user[0]))
             elif choice == "4":
                 print(self.controller.get_passwords(self.user[0]))
-                password_id = input("Entrez l'id du mot de passe à supprimer : ")
+                password_id = int(input("Entrez l'id du mot de passe à supprimer : "))
                 self.controller.delete_password(password_id)
             elif choice == "5":
                 self.isConnected = False

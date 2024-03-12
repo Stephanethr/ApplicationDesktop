@@ -1,7 +1,6 @@
 import os
 import sqlite3
-from src.requetes_sql import *
-from src.Chiffrement import *
+from src.Request import *
 
 
 class ConnexionDB:
@@ -29,29 +28,14 @@ class ConnexionDB:
             # Si la base de données n'existe pas, créer la base de données et la structure de table
             self.conn = sqlite3.connect(database_path_file)
             self.cursor = self.conn.cursor()
+            request = Request()
 
             # Créer la base de données
-            create_db(self.cursor)
+            request.create_db()
 
             self.conn.commit()
-            self.conn.close()
 
         # Connexion à la base de données
         self.conn = sqlite3.connect(database_path_file)
         self.cursor = self.conn.cursor()
 
-    def commit(self):
-        self.conn.commit()
-
-    def close(self):
-        self.conn.close()
-
-
-if __name__ == "__main__":
-    connDB = ConnexionDB()
-    connDB.connect_db()
-
-    create_user_bdd(connDB.get_cursor(), "admin", chiffrement.encrypt_password("admin"))
-    save_password(connDB.get_cursor(), chiffrement.encrypt_password("password"), "category", "site", 1)
-    connDB.commit()
-    connDB.close()

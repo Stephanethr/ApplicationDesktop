@@ -3,7 +3,7 @@ import string
 import random
 
 
-class Generation:
+class Generateur:
     # TODO random les constantes
     LONGUEUR_MIN_MDP = 12
     LONGUEUR_MAX_MDP = 21

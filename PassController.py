@@ -1,14 +1,14 @@
-from src import requetes_sql
-from src import Connexion_db
-from src import Chiffrement
-from src import Generateur_mdp
+from src.Request import Request
+from src.Chiffrement import Chiffrement
+from src.Generateur_mdp import Generateur
 
 
 class PassController:
     def __init__(self):
         self.user_inputs = {}
-        self.generation = Generateur_mdp.Generation()
+        self.generation = Generateur()
         self.chiffrement = None
+        self.request_db = Request()
 
     def generate_password(self, answers):
         """
@@ -45,11 +45,7 @@ class PassController:
                 password (str): Le mot de passe pour le nouvel utilisateur.
 
         """
-        conn = Connexion_db.ConnexionDB()
-        conn.connect_db()
-        requetes_sql.create_user_bdd(conn.cursor, username, password)
-        conn.commit()
-        conn.close()
+        self.request_db.create_user_bdd(username, password)
 
     def get_user(self, username, password, key):
         """
@@ -66,10 +62,7 @@ class PassController:
                 User: L'utilisateur récupéré de la base de données, ou None si aucun utilisateur ne correspond aux identifiants fournis.
             """
         self.createChiffrement(key)
-        conn = Connexion_db.ConnexionDB()
-        conn.connect_db()
-        user = requetes_sql.get_user_bdd(conn.cursor, username, password)
-        conn.close()
+        user = self.request_db.get_user_bdd(username, password)
         return user
 
     def save_password(self, login, password, categoryName, siteName, userID):
@@ -87,11 +80,7 @@ class PassController:
 
         """
         cipher = self.chiffrement.encrypt_password(password)
-        conn = Connexion_db.ConnexionDB()
-        conn.connect_db()
-        requetes_sql.save_password(conn.cursor, login, cipher, categoryName, siteName, userID)
-        conn.commit()
-        conn.close()
+        self.request_db.save_password(login, cipher, categoryName, siteName, userID)
 
     def get_passwords(self, userID):
         """
@@ -105,10 +94,7 @@ class PassController:
                 list: Une liste de tuples, chaque tuple contenant les détails d'un mot de passe. Les détails incluent l'ID du mot de passe,
                 le nom du site, le mot de passe déchiffré, le nom d'utilisateur et l'URL du site.
         """
-        conn = Connexion_db.ConnexionDB()
-        conn.connect_db()
-        res = requetes_sql.get_passwords(conn.cursor, userID)
-        conn.close()
+        res = self.request_db.get_passwords(userID)
         encrypted = [elt[2] for elt in res]
         for i in range(len(encrypted)):
             encrypted[i] = self.chiffrement.decrypt(encrypted[i].decode())
@@ -122,11 +108,8 @@ class PassController:
             Args:
                 password_id (int): L'ID du mot de passe à supprimer.
         """
-        conn = Connexion_db.ConnexionDB()
-        conn.connect_db()
-        requetes_sql.delete_password(conn.cursor, password_id)
-        conn.commit()
-        conn.close()
+        self.request_db.delete_password(password_id)
+
 
     def createChiffrement(self, password):
         """
@@ -137,4 +120,4 @@ class PassController:
             Args:
                 password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
         """
-        self.chiffrement = Chiffrement.Chiffrement(password)
+        self.chiffrement = Chiffrement(password)

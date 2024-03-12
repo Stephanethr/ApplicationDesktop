@@ -1,6 +1,7 @@
 import base64
 from cryptography.fernet import Fernet
 
+
 class Chiffrement:
     def __init__(self, key):
         if not isinstance(key, bytes):
