@@ -4,6 +4,7 @@ import random
 
 
 class Generation:
+    # TODO random les constantes
     LONGUEUR_MIN_MDP = 12
     LONGUEUR_MAX_MDP = 21
     LONGUEUR_MIN_CHOIX = 1
