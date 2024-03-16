@@ -6,7 +6,6 @@ class Main:
     def __init__(self):
         self.controller = PassController()
         self.user = None
-        self.isConnected = False
         self.running = True
 
     def connect_menu(self):
@@ -103,7 +102,6 @@ class Main:
     def run(self):
         self.connect_menu()
         if self.user:
-            self.isConnected = True
             print("Connecté en tant que", self.user)
             self.main_menu()
 

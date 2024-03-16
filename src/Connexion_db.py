@@ -1,12 +1,11 @@
 import os
 import sqlite3
-from src.Request import *
-
 
 class ConnexionDB:
     def __init__(self):
         self.conn = None
         self.cursor = None
+        self.connect_db()
 
     def get_cursor(self):
         return self.cursor
@@ -28,10 +27,7 @@ class ConnexionDB:
             # Si la base de données n'existe pas, créer la base de données et la structure de table
             self.conn = sqlite3.connect(database_path_file)
             self.cursor = self.conn.cursor()
-            request = Request()
-
-            # Créer la base de données
-            request.create_db()
+            self.create_db()
 
             self.conn.commit()
 
@@ -39,3 +35,9 @@ class ConnexionDB:
         self.conn = sqlite3.connect(database_path_file)
         self.cursor = self.conn.cursor()
 
+    def create_db(self):
+        self.cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, password TEXT, categoryName TEXT, siteName TEXT, userID INTEGER, FOREIGN KEY(userID) REFERENCES user(id));
+        CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, master_password TEXT);
+        """)
+        self.conn.commit()
