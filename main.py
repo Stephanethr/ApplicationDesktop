@@ -1,3 +1,5 @@
+import tkinter as tk
+from tkinter import ttk
 from PassController import PassController
 import hashlib
 
@@ -7,28 +9,108 @@ class Main:
         self.controller = PassController()
         self.user = None
         self.running = True
+        self.error_label = None  # Variable pour stocker la référence à l'étiquette d'erreur
 
     def connect_menu(self):
-        print("=" * 30)
-        print("PassGuardian")
-        print("=" * 30 + "\n")
-        choice = input("Se connecter (1), s'enregistrer (2) : ")
-        if choice == "2":
-            print("=" * 30)
-            print("Création de compte")
-            print("=" * 30 + "\n")
-            username = input("Nom d'utilisateur : ")
-            password = input("Mot de passe : ")
-            password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            key = bytes.fromhex(password)
-            self.controller.create_user(username, password)
-            self.user = self.controller.get_user(username, password, key)
+        self.root = tk.Tk()
+        self.root.title("PassGuardian")
+
+        # Frame pour le menu de connexion
+        self.connect_frame = ttk.Frame(self.root, padding="20")
+        self.connect_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        # Label et champs pour le nom d'utilisateur
+        self.username_label = ttk.Label(self.connect_frame, text="Nom d'utilisateur:")
+        self.username_label.grid(row=0, column=0, sticky=tk.W)
+        self.username_entry = ttk.Entry(self.connect_frame)
+        self.username_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
+
+        # Label et champs pour le mot de passe
+        self.password_label = ttk.Label(self.connect_frame, text="Mot de passe:")
+        self.password_label.grid(row=1, column=0, sticky=tk.W)
+        self.password_entry = ttk.Entry(self.connect_frame, show="*")
+        self.password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
+
+        # Bouton de connexion
+        self.login_button = ttk.Button(self.connect_frame, text="Se connecter", command=self.login)
+        self.login_button.grid(row=2, columnspan=2, pady=10)
+
+        # Bouton pour passer à la page d'enregistrement
+        self.register_button = ttk.Button(self.connect_frame, text="S'enregistrer", command=self.close_connect_menu)
+        self.register_button.grid(row=3, columnspan=2, pady=10)
+
+        self.root.mainloop()
+
+    def close_connect_menu(self):
+        # Cacher la fenêtre de connexion
+        self.root.withdraw()
+        # Ouvrir la page d'enregistrement
+        self.register_page()
+
+    def login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+        key = bytes.fromhex(password)
+        self.user = self.controller.get_user(username, password, key)
+        if self.user:
+            self.isConnected = True
+            self.connect_frame.destroy()  # Supprimer les widgets de connexion
+            self.root.destroy()  # Fermer la fenêtre de connexion
         else:
-            username = input("Nom d'utilisateur : ")
-            password = input("Mot de passe : ")
-            password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            key = bytes.fromhex(password)
-            self.user = self.controller.get_user(username, password, key)
+            # Afficher un message d'erreur si la connexion échoue
+            if self.error_label:
+                self.error_label.destroy()  # Supprimer le message d'erreur précédent s'il existe
+            self.error_label = ttk.Label(self.connect_frame, text="Nom d'utilisateur ou mot de passe incorrect",
+                                         foreground="red")
+            self.error_label.grid(row=4, columnspan=2)
+
+    def register_page(self):
+        # Création d'une nouvelle fenêtre pour la page d'enregistrement
+        self.register_window = tk.Toplevel(self.root)
+        self.register_window.title("Enregistrement")
+
+        # Frame pour la page d'enregistrement
+        self.register_frame = ttk.Frame(self.register_window, padding="20")
+        self.register_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        # Label et champs pour le nom d'utilisateur
+        self.new_username_label = ttk.Label(self.register_frame, text="Nouveau nom d'utilisateur:")
+        self.new_username_label.grid(row=0, column=0, sticky=tk.W)
+        self.new_username_entry = ttk.Entry(self.register_frame)
+        self.new_username_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
+
+        # Label et champs pour le mot de passe
+        self.new_password_label = ttk.Label(self.register_frame, text="Nouveau mot de passe:")
+        self.new_password_label.grid(row=1, column=0, sticky=tk.W)
+        self.new_password_entry = ttk.Entry(self.register_frame, show="*")
+        self.new_password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
+
+        # Bouton pour valider l'enregistrement
+        self.register_button = ttk.Button(self.register_frame, text="S'enregistrer", command=self.register)
+        self.register_button.grid(row=2, columnspan=2, pady=10)
+
+        # Bouton pour retourner à la page de connexion
+        self.return_button = ttk.Button(self.register_frame, text="Retour à la page de connexion",
+                                        command=self.close_register_page)
+        self.return_button.grid(row=3, columnspan=2, pady=10)
+
+    def register(self):
+        new_username = self.new_username_entry.get()
+        new_password = self.new_password_entry.get()
+        new_password = hashlib.sha256(new_password.encode('utf-8')).hexdigest()
+        new_key = bytes.fromhex(new_password)
+        self.controller.create_user(new_username, new_password)
+        self.user = self.controller.get_user(new_username, new_password, new_key)
+        if self.user:
+            if self.register_window:
+                self.register_window.destroy()  # Vérifier si la fenêtre existe avant de la détruire
+            self.root.destroy()  # Fermer la fenêtre de connexion
+    def close_register_page(self):
+        # Fermer la fenêtre d'enregistrement
+        self.register_window.destroy()
+        # Afficher à nouveau la fenêtre principale
+        self.root.deiconify()
 
     def main_menu(self):
         while self.running:
@@ -101,6 +183,7 @@ class Main:
 
     def run(self):
         self.connect_menu()
+
         if self.user:
             print("Connecté en tant que", self.user)
             self.main_menu()
