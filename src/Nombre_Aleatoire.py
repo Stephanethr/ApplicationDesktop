@@ -9,9 +9,9 @@ class NombreAleatoire:
         self.valeur_2 = 0
         self.valeur_3 = 0
         self.valeur_4 = 0
-        # Lorsque le thread est démaré il executera la méthode "generation_nbr_aleatoire"
+        # Lorsque le thread est démaré il exécutera la méthode "generation_nbr_aleatoire"
         self.thread = threading.Thread(target=self.generation_nbr_aleatoire)
-        # Permet d'executer le thread en arrière plan
+        # Permet d'exécuter le thread en arrière plan
         self.thread.daemon = True
 
     def generation_nbr_aleatoire(self):
