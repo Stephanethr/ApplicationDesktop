@@ -27,10 +27,15 @@ class Request:
         self.connexion.get_cursor().execute("""
         SELECT username FROM user WHERE username = ?;
         """, (username,))
-        if self.connexion.get_cursor().fetchone() == username:
-            return True
-        else:
-            return False
+        result = self.connexion.get_cursor().fetchone()
+        if result is not None:
+            if result[0] == username:
+                return True
+            else:
+                return False
+
+
+
 
     def get_passwords(self, userID):
         self.connexion.get_cursor().execute("""

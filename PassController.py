@@ -36,7 +36,6 @@ class PassController:
         print(self.user_inputs)
 
     def create_user(self, username, password):
-        # déplacer conn dans requetes_sql
         """
             Cette méthode crée un nouvel utilisateur dans la base de données.
 
@@ -48,13 +47,14 @@ class PassController:
                 User : L'utilisateur créé, ou 1 si un utilisateur avec le même nom d'utilisateur existe déjà.
 
         """
-        alreadyExist = self.request_db.verify_user_exist(username)
-        if alreadyExist:
+        already_exist = self.request_db.verify_user_exist(username)
+        if already_exist:
             return None
         else:
+            if self.chiffrement is None:
+                self.createChiffrement(password)
             self.request_db.create_user_bdd(username, password)
             return self.request_db.get_user_bdd(username, password)
-
 
     def get_user(self, username, password):
         """
@@ -70,7 +70,8 @@ class PassController:
             Returns:
                 User: L'utilisateur récupéré de la base de données, ou None si aucun utilisateur ne correspond aux identifiants fournis.
             """
-        self.createChiffrement(password)
+        if self.chiffrement is None:
+            self.createChiffrement(password)
         user = self.request_db.get_user_bdd(username, password)
         return user
 
@@ -88,6 +89,8 @@ class PassController:
                 userID (str): L'identifiant de l'utilisateur auquel le mot de passe est associé.
 
         """
+        if self.chiffrement is None:
+            print("chiffrement is none ptn")
         cipher = self.chiffrement.encrypt_password(password)
         self.request_db.save_password(login, cipher, categoryName, siteName, userID)
 
@@ -119,7 +122,6 @@ class PassController:
         """
         self.request_db.delete_password(password_id)
 
-
     def createChiffrement(self, password):
         """
             Cette méthode crée un objet de chiffrement avec le mot de passe fourni.
@@ -130,4 +132,6 @@ class PassController:
                 password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
         """
         key = bytes.fromhex(password)
+        print(key)
         self.chiffrement = Chiffrement(key)
+        print(self.chiffrement.key)

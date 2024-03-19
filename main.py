@@ -106,7 +106,7 @@ class Main:
         else:
             # self.user vaut 1 car un utilisateur ayant le même login à été trouvé
             # TODO afficher un message d'erreur
-            print("Un utilisateur ayant ce login existe déjà")
+            print("Ce login est déjà utilisé")
             return
 
     def close_register_page(self):
