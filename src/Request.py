@@ -23,6 +23,15 @@ class Request:
         """, (username, password))
         return self.connexion.get_cursor().fetchone()
 
+    def verify_user_exist(self, username):
+        self.connexion.get_cursor().execute("""
+        SELECT username FROM user WHERE username = ?;
+        """, (username,))
+        if self.connexion.get_cursor().fetchone() == username:
+            return True
+        else:
+            return False
+
     def get_passwords(self, userID):
         self.connexion.get_cursor().execute("""
         SELECT id, login, password, categoryName, siteName FROM password WHERE userID = ?;

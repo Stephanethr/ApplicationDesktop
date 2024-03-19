@@ -40,14 +40,23 @@ class PassController:
         """
             Cette méthode crée un nouvel utilisateur dans la base de données.
 
-            Args:
-                username (str): Le nom d'utilisateur pour le nouvel utilisateur.
-                password (str): Le mot de passe pour le nouvel utilisateur.
+            Args :
+                username (str) : Le nom d'utilisateur pour le nouvel utilisateur.
+                password (str) : Le mot de passe pour le nouvel utilisateur.
+
+            Returns :
+                User : L'utilisateur créé, ou 1 si un utilisateur avec le même nom d'utilisateur existe déjà.
 
         """
-        self.request_db.create_user_bdd(username, password)
+        alreadyExist = self.request_db.verify_user_exist(username)
+        if alreadyExist:
+            return None
+        else:
+            self.request_db.create_user_bdd(username, password)
+            return self.request_db.get_user_bdd(username, password)
 
-    def get_user(self, username, password, key):
+
+    def get_user(self, username, password):
         """
             Cette méthode récupère un utilisateur de la base de données.
 
@@ -61,7 +70,7 @@ class PassController:
             Returns:
                 User: L'utilisateur récupéré de la base de données, ou None si aucun utilisateur ne correspond aux identifiants fournis.
             """
-        self.createChiffrement(key)
+        self.createChiffrement(password)
         user = self.request_db.get_user_bdd(username, password)
         return user
 
@@ -120,4 +129,5 @@ class PassController:
             Args:
                 password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
         """
-        self.chiffrement = Chiffrement(password)
+        key = bytes.fromhex(password)
+        self.chiffrement = Chiffrement(key)

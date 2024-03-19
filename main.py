@@ -51,10 +51,8 @@ class Main:
         username = self.username_entry.get()
         password = self.password_entry.get()
         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
-        key = bytes.fromhex(password)
-        self.user = self.controller.get_user(username, password, key)
+        self.user = self.controller.get_user(username, password)
         if self.user:
-            self.isConnected = True
             self.connect_frame.destroy()  # Supprimer les widgets de connexion
             self.root.destroy()  # Fermer la fenêtre de connexion
         else:
@@ -75,13 +73,13 @@ class Main:
         self.register_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Label et champs pour le nom d'utilisateur
-        self.new_username_label = ttk.Label(self.register_frame, text="Nouveau nom d'utilisateur:")
+        self.new_username_label = ttk.Label(self.register_frame, text="Votre nom d'utilisateur:")
         self.new_username_label.grid(row=0, column=0, sticky=tk.W)
         self.new_username_entry = ttk.Entry(self.register_frame)
         self.new_username_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
 
         # Label et champs pour le mot de passe
-        self.new_password_label = ttk.Label(self.register_frame, text="Nouveau mot de passe:")
+        self.new_password_label = ttk.Label(self.register_frame, text="Votre mot de passe:")
         self.new_password_label.grid(row=1, column=0, sticky=tk.W)
         self.new_password_entry = ttk.Entry(self.register_frame, show="*")
         self.new_password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
@@ -99,13 +97,18 @@ class Main:
         new_username = self.new_username_entry.get()
         new_password = self.new_password_entry.get()
         new_password = hashlib.sha256(new_password.encode('utf-8')).hexdigest()
-        new_key = bytes.fromhex(new_password)
-        self.controller.create_user(new_username, new_password)
-        self.user = self.controller.get_user(new_username, new_password, new_key)
+        self.user = self.controller.create_user(new_username, new_password)
+
         if self.user:
             if self.register_window:
                 self.register_window.destroy()  # Vérifier si la fenêtre existe avant de la détruire
             self.root.destroy()  # Fermer la fenêtre de connexion
+        else:
+            # self.user vaut 1 car un utilisateur ayant le même login à été trouvé
+            # TODO afficher un message d'erreur
+            print("Un utilisateur ayant ce login existe déjà")
+            return
+
     def close_register_page(self):
         # Fermer la fenêtre d'enregistrement
         self.register_window.destroy()
@@ -139,7 +142,6 @@ class Main:
                 password_id = int(input("Entrez l'id du mot de passe à supprimer : "))
                 self.controller.delete_password(password_id)
             elif choice == "5":
-                self.isConnected = False
                 self.running = False
                 return
 
