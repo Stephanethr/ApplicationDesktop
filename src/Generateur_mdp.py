@@ -92,6 +92,29 @@ class Generateur:
         self.LTR_MIN_MIN_MDP, self.LTR_MAJ_MIN_MDP, self.CHIFFRE_MIN_MDP, self.SYMBOLE_MIN_MDP = (
             self.nbr_aleatoire.get_nbr_aleatoire())
 
+    def verification_nbr_aleatoire(self) -> bool:
+        valide = True
+        self.get_nbr_aleatoire()
+
+        if any(lettre_min in self.lettre_min for lettre_min in self.alphabet):
+            self.nbr_lettre_min_obligatoire = self.LTR_MIN_MIN_MDP
+
+        if any(lettre_maj in self.lettre_maj for lettre_maj in self.alphabet):
+            self.nbr_lettre_maj_obligatoire = self.LTR_MAJ_MIN_MDP
+
+        if any(chiffre in self.chiffres for chiffre in self.alphabet):
+            self.nbr_chiffre_obligatoire = self.CHIFFRE_MIN_MDP
+
+        if any(symbole in self.symboles for symbole in self.alphabet):
+            self.nbr_symbole_obligatoire = self.SYMBOLE_MIN_MDP
+
+        if (self.nbr_symbole_obligatoire + self.nbr_chiffre_obligatoire + self.nbr_lettre_maj_obligatoire +
+                self.nbr_lettre_min_obligatoire > self.longueur_mdp):
+            valide = False
+
+        return valide
+
+
     def choix_utilisateur(self, caractere_voulu: list[int]) -> bool:
         """
             Crée un alphabet personnalisé selon les choix entrés par l'utilisateur.
@@ -128,20 +151,9 @@ class Generateur:
             self.alphabet = alphabet
 
             # Met à jour les nombres d'occurrences obligatoires de chaque type de caractère
-            self.get_nbr_aleatoire()
-            # Vérifie si les lettres minuscules sont présentes dans l'alphabet et met à jour le nombre obligatoire
-            # si nécessaire
-            if any(lettre_min in self.lettre_min for lettre_min in self.alphabet):
-                self.nbr_lettre_min_obligatoire = self.LTR_MIN_MIN_MDP
 
-            if any(lettre_maj in self.lettre_maj for lettre_maj in self.alphabet):
-                self.nbr_lettre_maj_obligatoire = self.LTR_MAJ_MIN_MDP
-
-            if any(chiffre in self.chiffres for chiffre in self.alphabet):
-                self.nbr_chiffre_obligatoire = self.CHIFFRE_MIN_MDP
-
-            if any(symbole in self.symboles for symbole in self.alphabet):
-                self.nbr_symbole_obligatoire = self.SYMBOLE_MIN_MDP
+            while not self.verification_nbr_aleatoire():
+                pass
 
         else:
             valide = False
@@ -177,35 +189,28 @@ class Generateur:
 
         return mot_de_passe
 
-    def generation_mdp(self, nbr_mdp: int) -> list[str]:
+    def generation_mdp(self) -> str:
         """
-        Génère le nombre de mots de passe voulus en fonction des
+        Génère un mot de passe fonction des
         conditions entrées au préalable par l'utilisateur (1 : lettre min, 2: lettre maj,...)
 
-        :param nbr_mdp: le nombre de mots de passe à générer
-        :type nbr_mdp: int
         :return: Liste de mots de passe générés
-        :rtype: list[str]
+        :rtype: str
         """
 
-        mots_de_passe = []
+        mot_de_passe = ''
+        # Calcule la longueur du mot de passe en fonction des caractères obligatoires
+        longueur_mdp = (self.longueur_mdp - self.nbr_chiffre_obligatoire - self.nbr_symbole_obligatoire -
+                        self.nbr_lettre_min_obligatoire - self.nbr_lettre_maj_obligatoire)
+        # Génère une partie aléatoire du mot de passe avec des caractères de l'alphabet
+        for j in range(longueur_mdp):
+            mot_de_passe += secrets.choice(self.alphabet)
+        # Ajoute les caractères obligatoires manquants au mot de passe
+        mot_de_passe = self.mot_de_passe_valide(mot_de_passe)
 
-        for i in range(nbr_mdp):
-            mot_de_passe = ''
-            # Calcule la longueur du mot de passe en fonction des caractères obligatoires
-            longueur_mdp = (self.longueur_mdp - self.nbr_chiffre_obligatoire - self.nbr_symbole_obligatoire -
-                            self.nbr_lettre_min_obligatoire - self.nbr_lettre_maj_obligatoire)
-            # Génère une partie aléatoire du mot de passe avec des caractères de l'alphabet
-            for j in range(longueur_mdp):
-                mot_de_passe += secrets.choice(self.alphabet)
-            # Ajoute les caractères obligatoires manquants au mot de passe
-            mot_de_passe = self.mot_de_passe_valide(mot_de_passe)
+        # Mélanger le mdp
+        liste_mot_de_passe = list(mot_de_passe)
+        random.shuffle(liste_mot_de_passe)
+        mot_de_passe = ''.join(liste_mot_de_passe)
 
-            # Mélanger le mdp
-            liste_mot_de_passe = list(mot_de_passe)
-            random.shuffle(liste_mot_de_passe)
-            mot_de_passe = ''.join(liste_mot_de_passe)
-
-            mots_de_passe.append(mot_de_passe)
-
-        return mots_de_passe
+        return mot_de_passe

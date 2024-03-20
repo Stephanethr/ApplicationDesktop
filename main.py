@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import pyperclip
 from PassController import PassController
 import hashlib
 
@@ -99,7 +100,7 @@ class Main:
 
         self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
                                           command=self.logout_password_func)
-        self.logout_password.grid(row=5, column=0, pady=5)
+        self.logout_password.grid(row=1, column=1, pady=5)
 
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                           command=self.register_password_func)
@@ -114,11 +115,18 @@ class Main:
                                            command=self.delete_password_func)
         self.delete_password.grid(row=4, column=0, pady=5)"""
 
-
-
     def generate_password_menu(self):
         self.generate_frame = ttk.Frame(self.root, padding="20")
         self.generate_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        close_button = ttk.Button(self.generate_frame, text="Retour", command=self.close_generate_password_menu)
+        close_button.grid(row=0, column=1, columnspan=2, sticky=tk.E, pady=10)
+
+        # Label pour afficher le résultat
+        self.result_label = ttk.Label(self.generate_frame, text="")
+        self.result_label.grid(row=1, column=0, pady=10)
+        self.copy_button = ttk.Button(self.generate_frame, text="Copier le mot de passe", command=self.copy_password)
+        self.copy_button.grid(row=1, column=1, pady=10)
 
         # Liste des options de choix avec leur nom et leur valeur
         options = [
@@ -142,25 +150,30 @@ class Main:
         for i, option in enumerate(options):
             choice_vars[option["value"]] = tk.IntVar()
             ttk.Checkbutton(self.generate_frame, text=option["name"], variable=choice_vars[option["value"]], onvalue=1,
-                            offvalue=0, command=update_choices).grid(row=i, column=0, sticky=tk.W, pady=5)
+                            offvalue=0, command=update_choices).grid(row=i + 2, column=0, sticky=tk.W, pady=5)
+
+        # Labels et entrées pour la longueur et le nombre de mots de passe
+        ttk.Label(self.generate_frame, text="Nombre de caractères:").grid(row=len(options) + 2, column=0, sticky=tk.W)
+        self.password_length_entry = ttk.Entry(self.generate_frame)
+        self.password_length_entry.grid(row=len(options) + 2, column=1, sticky=tk.W, pady=5)
 
         # Bouton pour terminer la sélection
-        finish_button = ttk.Button(self.generate_frame, text="Terminer la sélection", command=self.finish_selection)
-        finish_button.grid(row=len(options), column=0, sticky=tk.E, pady=10)
+        ok_button = ttk.Button(self.generate_frame, text="Confirmer", command=self.selection)
+        ok_button.grid(row=len(options) + 3, column=0, columnspan=2, sticky=tk.E, pady=10)
 
-    def finish_selection(self):
+    def selection(self):
         if self.choices:
-            password_length = input("Nombre de caractères : ")
-            password_count = input("Nombre de mots de passe : ")
+            try:
+                password_length = int(self.password_length_entry.get())
+                answers = {
+                    'password_options': list(self.choices),
+                    'password_length': password_length
+                }
 
-            answers = {
-                'password_options': list(self.choices),
-                'password_length': int(password_length),
-                'password_count': int(password_count),
-            }
-
-            print(self.controller.generate_password(answers))
-            self.controller.print_user_inputs()
+                result = self.controller.generate_password(answers)
+                self.result_label.config(text=result)
+            except ValueError:
+                messagebox.showerror("Erreur", "Veuillez entrer des valeurs numériques valides.")
         else:
             messagebox.showerror("Erreur", "Veuillez sélectionner au moins un choix.")
 
@@ -235,6 +248,19 @@ class Main:
 
     def close_display_password_frame(self, frame):
         frame.destroy()
+        self.main_menu_page()
+
+
+    def copy_password(self):
+        password = self.result_label.cget("text")
+        if password:
+            pyperclip.copy(password)
+            messagebox.showinfo("Copié", "Le mot de passe a été copié dans le presse-papiers.")
+        else:
+            messagebox.showerror("Erreur", "Aucun mot de passe à copier.")
+
+    def close_generate_password_menu(self):
+        self.generate_frame.destroy()
         self.main_menu_page()
 
 

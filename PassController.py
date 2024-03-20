@@ -29,11 +29,8 @@ class PassController:
         if (self.generation.longueur_valide(self.user_inputs['password_length']) &
                 self.generation.choix_utilisateur(self.user_inputs['password_options'])):
 
-            mdp_genere = self.generation.generation_mdp(self.user_inputs['password_count'])
+            mdp_genere = self.generation.generation_mdp()
             return mdp_genere
-
-    def print_user_inputs(self):
-        print(self.user_inputs)
 
     def create_user(self, username, password):
         """
