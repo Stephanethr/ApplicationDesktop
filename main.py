@@ -100,7 +100,7 @@ class Main:
         self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
                                           command=self.logout_password_func)
         self.logout_password.grid(row=5, column=0, pady=5)
-        """     TODO
+
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                           command=self.register_password_func)
         self.register_password.grid(row=2, column=0, pady=5)
@@ -108,6 +108,7 @@ class Main:
         self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
                                             command=self.display_password_func)
         self.display_password.grid(row=3, column=0, pady=5)
+        """     TODO
 
         self.delete_password = ttk.Button(self.main_menu_frame, text="Supprimer un mot de passe",
                                            command=self.delete_password_func)
@@ -162,6 +163,80 @@ class Main:
             self.controller.print_user_inputs()
         else:
             messagebox.showerror("Erreur", "Veuillez sélectionner au moins un choix.")
+
+
+    def register_password_func(self):
+        # Frame pour l'enregistrement du mot de passe
+        register_password_frame = ttk.Frame(self.root, padding="20")
+        register_password_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        # Label et champs pour le login
+        login_label = ttk.Label(register_password_frame, text="Login:")
+        login_label.grid(row=0, column=0, sticky=tk.W)
+        login_entry = ttk.Entry(register_password_frame)
+        login_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
+
+        # Label et champs pour le mot de passe
+        password_label = ttk.Label(register_password_frame, text="Mot de passe:")
+        password_label.grid(row=1, column=0, sticky=tk.W)
+        password_entry = ttk.Entry(register_password_frame, show="*")
+        password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
+
+        # Label et champs pour la catégorie
+        category_label = ttk.Label(register_password_frame, text="Catégorie:")
+        category_label.grid(row=2, column=0, sticky=tk.W)
+        category_entry = ttk.Entry(register_password_frame)
+        category_entry.grid(row=2, column=1, sticky=tk.W, pady=5)
+
+        # Label et champs pour le nom du site
+        site_label = ttk.Label(register_password_frame, text="Nom du site:")
+        site_label.grid(row=3, column=0, sticky=tk.W)
+        site_entry = ttk.Entry(register_password_frame)
+        site_entry.grid(row=3, column=1, sticky=tk.W, pady=5)
+
+        # Bouton pour enregistrer le mot de passe
+        # Bouton pour enregistrer le mot de passe
+        save_button = ttk.Button(register_password_frame, text="Enregistrer",
+                                 command=lambda: self.save_and_return_to_main_menu(login_entry.get(),
+                                                                                   password_entry.get(),
+                                                                                   category_entry.get(),
+                                                                                   site_entry.get(),
+                                                                                   self.user[0],
+                                                                                   register_password_frame))
+        save_button.grid(row=4, columnspan=2, pady=10)
+
+
+    def save_and_return_to_main_menu(self, login, password, category, site, user_id, frame):
+        self.controller.save_password(login, password, category, site, user_id)
+        frame.destroy()
+        self.main_menu_page()
+
+
+    def display_password_func(self):
+        # Frame pour l'enregistrement du mot de passe
+        display_password_frame = ttk.Frame(self.root, padding="20")
+        display_password_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        # Récupérer les mots de passe de l'utilisateur
+        passwords = self.controller.get_passwords(self.user[0])
+
+        # Afficher les mots de passe dans la frame
+        for i, password in enumerate(passwords, start=1):
+            ttk.Label(display_password_frame, text=f"Login: {password[1]}").grid(row=i, column=0, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"Mot de passe: {password[2]}").grid(row=i, column=1, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"Catégorie: {password[3]}").grid(row=i, column=2, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"Site: {password[4]}").grid(row=i, column=3, sticky=tk.W)
+
+        # Bouton pour retourner au menu principal
+        close_button = ttk.Button(display_password_frame, text="Retour au menu principal",
+                                  command=lambda: self.close_display_password_frame(display_password_frame))
+        close_button.grid(row=len(passwords) + 1, columnspan=4, pady=10)
+
+
+    def close_display_password_frame(self, frame):
+        frame.destroy()
+        self.main_menu_page()
+
 
     def logout_password_func(self):
         self.root.destroy()
