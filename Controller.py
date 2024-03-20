@@ -3,7 +3,7 @@ from src.Chiffrement import Chiffrement
 from src.Generateur_mdp import Generateur
 
 
-class PassController:
+class Controller:
     def __init__(self):
         self.user_inputs = {}
         self.generation = Generateur()
