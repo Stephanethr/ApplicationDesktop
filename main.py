@@ -100,7 +100,7 @@ class Main:
         self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
                                           command=self.logout_password_func)
         self.logout_password.grid(row=5, column=0, pady=5)
-"""     TODO
+        """     TODO
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                           command=self.register_password_func)
         self.register_password.grid(row=2, column=0, pady=5)
