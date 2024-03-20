@@ -125,6 +125,8 @@ class Main:
         # Label pour afficher le résultat
         self.result_label = ttk.Label(self.generate_frame, text="")
         self.result_label.grid(row=1, column=0, pady=10)
+
+        # Bouton pour copier le mot de passe
         self.copy_button = ttk.Button(self.generate_frame, text="Copier le mot de passe", command=self.copy_password)
         self.copy_button.grid(row=1, column=1, pady=10)
 
@@ -136,28 +138,30 @@ class Main:
             {"name": "Des caractères spéciaux", "value": 4}
         ]
 
-        # Définition des variables pour les choix
-        self.choices = set()
-
+        # Met à jour les choix en vidant d'abord l'ensemble `self.choices`,
+        # puis en ajoutant les valeurs des options cochées.
         def update_choices():
             self.choices.clear()
-            for option in options:
-                if option["value"] in choice_vars and choice_vars[option["value"]].get() == 1:
-                    self.choices.add(option["value"])
+            for opt in options:
+                if opt["value"] in choice_vars and choice_vars[opt["value"]].get() == 1:
+                    self.choices.add(opt["value"])
 
-        # Variables pour les cases à cocher
+        # Crée un dictionnaire de variables de case à cocher avec les options, et associe chaque variable à une
+        # case à cocher dans la fenêtre tkinter.
+        # Lorsqu'une case à cocher est cochée ou décochée, la fonction `update_choices` est appelée pour mettre
+        # à jour les choix.
+
         choice_vars = {}
         for i, option in enumerate(options):
             choice_vars[option["value"]] = tk.IntVar()
             ttk.Checkbutton(self.generate_frame, text=option["name"], variable=choice_vars[option["value"]], onvalue=1,
                             offvalue=0, command=update_choices).grid(row=i + 2, column=0, sticky=tk.W, pady=5)
 
-        # Labels et entrées pour la longueur et le nombre de mots de passe
+        # Labels et entrées pour la longueur du mdp
         ttk.Label(self.generate_frame, text="Nombre de caractères:").grid(row=len(options) + 2, column=0, sticky=tk.W)
         self.password_length_entry = ttk.Entry(self.generate_frame)
         self.password_length_entry.grid(row=len(options) + 2, column=1, sticky=tk.W, pady=5)
 
-        # Bouton pour terminer la sélection
         ok_button = ttk.Button(self.generate_frame, text="Confirmer", command=self.selection)
         ok_button.grid(row=len(options) + 3, column=0, columnspan=2, sticky=tk.E, pady=10)
 
@@ -208,7 +212,6 @@ class Main:
         site_entry.grid(row=3, column=1, sticky=tk.W, pady=5)
 
         # Bouton pour enregistrer le mot de passe
-        # Bouton pour enregistrer le mot de passe
         save_button = ttk.Button(register_password_frame, text="Enregistrer",
                                  command=lambda: self.save_and_return_to_main_menu(login_entry.get(),
                                                                                    password_entry.get(),
@@ -218,12 +221,10 @@ class Main:
                                                                                    register_password_frame))
         save_button.grid(row=4, columnspan=2, pady=10)
 
-
     def save_and_return_to_main_menu(self, login, password, category, site, user_id, frame):
         self.controller.save_password(login, password, category, site, user_id)
         frame.destroy()
         self.main_menu_page()
-
 
     def display_password_func(self):
         # Frame pour l'enregistrement du mot de passe
@@ -245,11 +246,9 @@ class Main:
                                   command=lambda: self.close_display_password_frame(display_password_frame))
         close_button.grid(row=len(passwords) + 1, columnspan=4, pady=10)
 
-
     def close_display_password_frame(self, frame):
         frame.destroy()
         self.main_menu_page()
-
 
     def copy_password(self):
         password = self.result_label.cget("text")
@@ -262,7 +261,6 @@ class Main:
     def close_generate_password_menu(self):
         self.generate_frame.destroy()
         self.main_menu_page()
-
 
     def logout_password_func(self):
         self.root.destroy()

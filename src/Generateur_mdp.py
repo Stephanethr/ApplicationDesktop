@@ -93,6 +93,13 @@ class Generateur:
             self.nbr_aleatoire.get_nbr_aleatoire())
 
     def verification_nbr_aleatoire(self) -> bool:
+        """
+        Vérifie si la somme des nombres obligatoire en fonctions des caractères voulus dans le mot de passe est
+        infèrieur à la longeur du mot de passe
+
+        :return: True si la somme des nombres obligatoires sont infèrieur à la longeur du mot de passe, False sinon.
+        :rtype: Bool
+        """
         valide = True
         self.get_nbr_aleatoire()
 
@@ -121,7 +128,7 @@ class Generateur:
 
             Prend en paramètre une liste d'entiers représentant les types de caractères
             à inclure dans l'alphabet souhaité. Les entiers sont définis comme suit dans le dictionnaire
-            conditions:
+            conditions :
 
             1 : Lettres minuscules
             2 : Lettres majuscules
@@ -149,8 +156,6 @@ class Generateur:
             for condition in caractere_voulu:
                 alphabet += conditions[condition]
             self.alphabet = alphabet
-
-            # Met à jour les nombres d'occurrences obligatoires de chaque type de caractère
 
             while not self.verification_nbr_aleatoire():
                 pass
