@@ -52,10 +52,7 @@ class Main:
         self.register_page()
 
     def register_page(self):
-        self.register_window = tk.Toplevel(self.root)
-        self.register_window.title("Enregistrement")
-
-        self.register_frame = ttk.Frame(self.register_window, padding="20")
+        self.register_frame = ttk.Frame(self.root, padding="20")
         self.register_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         self.new_username_label = ttk.Label(self.register_frame, text="Votre nom d'utilisateur:")
@@ -76,6 +73,7 @@ class Main:
         self.return_button.grid(row=3, columnspan=2, pady=10)
 
     def register(self):
+        self.close_connect_menu()
         new_username = self.new_username_entry.get()
         new_password = hashlib.sha256(self.new_password_entry.get().encode('utf-8')).hexdigest()
         if self.controller.create_user(new_username, new_password):
@@ -85,8 +83,8 @@ class Main:
             messagebox.showerror("Erreur d'enregistrement", "Ce nom d'utilisateur existe déjà.")
 
     def close_register_page(self):
-        self.register_window.destroy()
-        self.root.deiconify()
+        self.register_frame.destroy()
+        self.create_connect_menu()
 
     def main_menu_page(self):
         self.main_menu_frame = ttk.Frame(self.root, padding="20")
@@ -100,9 +98,7 @@ class Main:
         self.generate_button.grid(row=1, column=0, pady=5)
 
     def generate_password_menu(self):
-        self.generate_window = tk.Toplevel(self.root)
-        self.generate_window.title("Générer un mot de passe")
-        self.generate_frame = ttk.Frame(self.generate_window, padding="20")
+        self.generate_frame = ttk.Frame(self.root, padding="20")
         self.generate_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         # Liste des options de choix avec leur nom et leur valeur
