@@ -1,4 +1,4 @@
-# PassGuardian V0
+# PassGuardian V1
 
 Un gestionnaire de mots de passe simple et sécurisé.
 
