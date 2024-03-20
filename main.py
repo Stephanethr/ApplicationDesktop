@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import pyperclip
-from PassController import PassController
+from Controller import Controller
 import hashlib
 
 
 class Main:
     def __init__(self):
         self.choices = None
-        self.controller = PassController()
+        self.controller = Controller()
         self.user = None
         self.root = tk.Tk()
         self.root.title("PassGuardian")
