@@ -41,7 +41,7 @@ class Controller:
                 master_password (str) : Le mot de passe pour le nouvel utilisateur.
 
             Returns :
-                User : L'utilisateur créé, ou 1 si un utilisateur avec le même nom d'utilisateur existe déjà.
+                User : L'utilisateur créé, ou None si un utilisateur avec le même nom d'utilisateur existe déjà.
 
         """
         already_exist = self.request_db.verify_user_exist(username)
