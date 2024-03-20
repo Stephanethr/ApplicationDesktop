@@ -97,6 +97,24 @@ class Main:
                                           command=self.generate_password_menu)
         self.generate_button.grid(row=1, column=0, pady=5)
 
+        self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
+                                          command=self.logout_password_func)
+        self.logout_password.grid(row=5, column=0, pady=5)
+"""     TODO
+        self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
+                                          command=self.register_password_func)
+        self.register_password.grid(row=2, column=0, pady=5)
+
+        self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
+                                            command=self.display_password_func)
+        self.display_password.grid(row=3, column=0, pady=5)
+
+        self.delete_password = ttk.Button(self.main_menu_frame, text="Supprimer un mot de passe",
+                                           command=self.delete_password_func)
+        self.delete_password.grid(row=4, column=0, pady=5)"""
+
+
+
     def generate_password_menu(self):
         self.generate_frame = ttk.Frame(self.root, padding="20")
         self.generate_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -144,6 +162,9 @@ class Main:
             self.controller.print_user_inputs()
         else:
             messagebox.showerror("Erreur", "Veuillez sélectionner au moins un choix.")
+
+    def logout_password_func(self):
+        self.root.destroy()
 
     def run(self):
         self.root.mainloop()
