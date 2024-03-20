@@ -11,12 +11,10 @@ Un gestionnaire de mots de passe simple et sécurisé.
 ## Comment utiliser
 
 1. Exécutez le fichier main.py.
-2. Suivre les instructions affichées dans le terminal.
+2. Le programme se lance (une fenêtre doit s'ouvrir).
 
 ## Auteurs
 
 - Thiry Stéphane
 - Mirande Clémentine
 - Michelozzi Matthieu
-
-# test
