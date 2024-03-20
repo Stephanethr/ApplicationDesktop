@@ -132,6 +132,4 @@ class PassController:
                 password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
         """
         key = bytes.fromhex(password)
-        print(key)
         self.chiffrement = Chiffrement(key)
-        print(self.chiffrement.key)

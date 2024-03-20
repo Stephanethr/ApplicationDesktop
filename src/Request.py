@@ -34,9 +34,6 @@ class Request:
             else:
                 return False
 
-
-
-
     def get_passwords(self, userID):
         self.connexion.get_cursor().execute("""
         SELECT id, login, password, categoryName, siteName FROM password WHERE userID = ?;
