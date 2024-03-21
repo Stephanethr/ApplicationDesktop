@@ -175,7 +175,6 @@ class Main:
                     'password_options': list(self.choices),
                     'password_length': password_length
                 }
-
                 result = self.controller.generate_password(answers)
                 self.result_label.config(text=result)
             except ValueError:
