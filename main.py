@@ -5,6 +5,7 @@ import pyperclip
 from Controller import Controller
 import hashlib
 import subprocess
+import sv_ttk
 
 
 class Main:
@@ -134,10 +135,6 @@ class Main:
                                           command=self.generate_password_menu)
         self.generate_button.grid(row=1, column=0, pady=5)
 
-        self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
-                                          command=self.logout_password_func)
-        self.logout_password.grid(row=1, column=1, pady=5)
-
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                             command=self.register_password_func)
         self.register_password.grid(row=2, column=0, pady=5)
@@ -145,6 +142,10 @@ class Main:
         self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
                                            command=self.display_password_func)
         self.display_password.grid(row=3, column=0, pady=5)
+
+        self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
+                                          command=self.logout_password_func)
+        self.logout_password.grid(row=4, column=0, pady=5)
         """     TODO
 
         self.delete_password = ttk.Button(self.main_menu_frame, text="Supprimer un mot de passe",
@@ -155,16 +156,13 @@ class Main:
         self.generate_frame = ttk.Frame(self.root, padding="20")
         self.generate_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
-        close_button = ttk.Button(self.generate_frame, text="Retour", command=self.close_generate_password_menu)
-        close_button.grid(row=0, column=1, columnspan=2, sticky=tk.E, pady=10)
+        # Créer un cadre pour afficher le résultat
+        result_frame = ttk.Frame(self.generate_frame, padding=5)
+        result_frame.grid(row=1, column=0, pady=10, columnspan=3, sticky=tk.W + tk.E)
 
-        # Label pour afficher le résultat
-        self.result_label = ttk.Label(self.generate_frame, text="")
-        self.result_label.grid(row=1, column=0, pady=10)
-
-        # Bouton pour copier le mot de passe
-        self.copy_button = ttk.Button(self.generate_frame, text="Copier le mot de passe", command=self.copy_password)
-        self.copy_button.grid(row=1, column=1, pady=10)
+        # Label pour afficher le résultat dans le cadre avec le texte en noir
+        self.result_label = ttk.Label(result_frame, text="", anchor='w')
+        self.result_label.pack(side='left')  # Utilisez side='left' pour placer le texte à gauche dans le cadre
 
         # Liste des options de choix avec leur nom et leur valeur
         options = [
@@ -200,8 +198,16 @@ class Main:
         self.password_length_entry = ttk.Entry(self.generate_frame)
         self.password_length_entry.grid(row=len(options) + 2, column=1, sticky=tk.W, pady=5)
 
+        close_button = ttk.Button(self.generate_frame, text="Retour", command=self.close_generate_password_menu)
+        close_button.grid(row=len(options) + 3, column=0, sticky=tk.W, pady=1,
+                          padx=(0, 5))  # Utilisation de padx pour la marge à droite
+
+        copy_button = ttk.Button(self.generate_frame, text="Copier", command=self.copy_password)
+        copy_button.grid(row=1, column=0, columnspan=3, sticky=tk.E, pady=5, padx=(5, 0))
+
         ok_button = ttk.Button(self.generate_frame, text="Confirmer", command=self.selection)
-        ok_button.grid(row=len(options) + 3, column=0, columnspan=2, sticky=tk.E, pady=10)
+        ok_button.grid(row=len(options) + 3, column=2, sticky=tk.E, pady=1,
+                       padx=(5, 0))  # Utilisation de padx pour la marge à gauche
 
     def selection(self):
         if self.choices:
@@ -303,6 +309,11 @@ class Main:
 
     def run(self):
         print(self.check_os_theme())
+        # Obtenez le thème du système d'exploitation
+        os_theme = self.check_os_theme()
+
+        # Utilisez le thème obtenu pour définir le thème dans sv_ttk
+        sv_ttk.set_theme(os_theme)
         self.root.mainloop()
 
 
