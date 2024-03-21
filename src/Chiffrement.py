@@ -1,8 +1,7 @@
 import os
-from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import hashes, padding
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-
 
 class Chiffrement:
     def __init__(self, password):
@@ -24,21 +23,14 @@ class Chiffrement:
         Returns:
             bytes: La clé dérivée.
         """
-        # TODO le sel crée des erreurs lors du déchiffrement puisque la clé est regénérée à chaque
-        #  lancement de l'application, il faut alors trouver une solution fiable et sûre pour saler
-        #  et réussir a déchiffrer les mdp
 
-        # Génération d'un sel aléatoire
-        #salt = os.urandom(16)
+        # Padding du mot de passe selon PKCS7
+        padder = padding.PKCS7(128).padder()
+        padded_data = padder.update(password.encode()) + padder.finalize()
 
-        # Concaténation du mot de passe avec le sel
-        #password_with_salt = password.encode() + salt
-
-        password_without_salt = password.encode()
-
-        # Hashage du mot de passe avec le sel
+        # Hashage du mot de passe paddé
         digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
-        digest.update(password_without_salt)
+        digest.update(padded_data)
         key = digest.finalize()
         return key
 
