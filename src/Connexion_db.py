@@ -37,7 +37,7 @@ class ConnexionDB:
 
     def create_db(self):
         self.cursor.executescript("""
-        CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, password TEXT, categoryName TEXT, siteName TEXT, userID INTEGER, FOREIGN KEY(userID) REFERENCES user(id));
+        CREATE TABLE IF NOT EXISTS password (id INTEGER PRIMARY KEY AUTOINCREMENT, login TEXT, password TEXT, categoryName TEXT, siteName TEXT, userID INTEGER, iv TEXT, tag TEXT, FOREIGN KEY(userID) REFERENCES user(id));
         CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, master_password TEXT);
         """)
         self.conn.commit()

@@ -5,10 +5,10 @@ class Request:
     def __init__(self):
         self.connexion = ConnexionDB()
 
-    def save_password(self, login, password, categoryName, siteName, userID):
+    def save_password(self, login, password, categoryName, siteName, userID, iv, tag):
         self.connexion.get_cursor().execute("""
-        INSERT INTO password (login, password, categoryName, siteName, userID) VALUES (? , ? , ? , ? , ?);
-        """, (login, password, categoryName, siteName, userID))
+        INSERT INTO password (login, password, categoryName, siteName, userID, iv, tag) VALUES (? , ? , ? , ? , ? , ? , ?);
+        """, (login, password, categoryName, siteName, userID, iv, tag))
         self.connexion.get_conn().commit()
 
     def create_user_bdd(self, username, password):
@@ -36,7 +36,7 @@ class Request:
 
     def get_passwords(self, userID):
         self.connexion.get_cursor().execute("""
-        SELECT id, login, password, categoryName, siteName FROM password WHERE userID = ?;
+        SELECT id, login, password, categoryName, siteName, iv, tag FROM password WHERE userID = ?;
         """, (userID,))
         return self.connexion.get_cursor().fetchall()
 

@@ -3,7 +3,7 @@ from src.Chiffrement import Chiffrement
 from src.Generateur_mdp import Generateur
 
 
-class PassController:
+class Controller:
     def __init__(self):
         self.user_inputs = {}
         self.generation = Generateur()
@@ -32,16 +32,16 @@ class PassController:
             mdp_genere = self.generation.generation_mdp()
             return mdp_genere
 
-    def create_user(self, username, password):
+    def create_user(self, username, master_password):
         """
             Cette méthode crée un nouvel utilisateur dans la base de données.
 
             Args :
                 username (str) : Le nom d'utilisateur pour le nouvel utilisateur.
-                password (str) : Le mot de passe pour le nouvel utilisateur.
+                master_password (str) : Le mot de passe pour le nouvel utilisateur.
 
             Returns :
-                User : L'utilisateur créé, ou 1 si un utilisateur avec le même nom d'utilisateur existe déjà.
+                User : L'utilisateur créé, ou None si un utilisateur avec le même nom d'utilisateur existe déjà.
 
         """
         already_exist = self.request_db.verify_user_exist(username)
@@ -49,11 +49,11 @@ class PassController:
             return None
         else:
             if self.chiffrement is None:
-                self.createChiffrement(password)
-            self.request_db.create_user_bdd(username, password)
-            return self.request_db.get_user_bdd(username, password)
+                self.createChiffrement(master_password)
+            self.request_db.create_user_bdd(username, master_password)
+            return self.request_db.get_user_bdd(username, master_password)
 
-    def get_user(self, username, password):
+    def get_user(self, username, master_password):
         """
             Cette méthode récupère un utilisateur de la base de données.
 
@@ -61,15 +61,14 @@ class PassController:
 
             Args:
                 username (str): Le nom d'utilisateur de l'utilisateur à récupérer.
-                password (str): Le mot de passe de l'utilisateur à récupérer.
-                key (str): La clé utilisée pour créer le chiffrement.
+                master_password (str): Le mot de passe de l'utilisateur à récupérer.
 
             Returns:
                 User: L'utilisateur récupéré de la base de données, ou None si aucun utilisateur ne correspond aux identifiants fournis.
             """
         if self.chiffrement is None:
-            self.createChiffrement(password)
-        user = self.request_db.get_user_bdd(username, password)
+            self.createChiffrement(master_password)
+        user = self.request_db.get_user_bdd(username, master_password)
         return user
 
     def save_password(self, login, password, categoryName, siteName, userID):
@@ -86,28 +85,37 @@ class PassController:
                 userID (str): L'identifiant de l'utilisateur auquel le mot de passe est associé.
 
         """
+        password_bytes = password.encode('utf-8')  # ou 'latin-1' selon l'encodage de votre choix
         if self.chiffrement is None:
-            print("chiffrement is none ptn")
-        cipher = self.chiffrement.encrypt_password(password)
-        self.request_db.save_password(login, cipher, categoryName, siteName, userID)
+            print("Pas d'objet chiffrement instancié")
+        iv, cipher, tag = self.chiffrement.encrypt_password(password_bytes)
+        self.request_db.save_password(login, cipher, categoryName, siteName, userID, iv, tag)
 
     def get_passwords(self, userID):
         """
-            Cette méthode récupère les mots de passe d'un utilisateur spécifique de la base de données.
-            Les mots de passe récupérés sont déchiffrés avant d'être renvoyés.
+        Récupère les mots de passe d'un utilisateur spécifique de la base de données.
+        Les mots de passe récupérés sont déchiffrés avant d'être renvoyés.
 
-            Args:
-                userID (int): L'ID de l'utilisateur pour lequel récupérer les mots de passe.
+        Args:
+            userID (int): L'ID de l'utilisateur pour lequel récupérer les mots de passe.
 
-            Returns:
-                list: Une liste de tuples, chaque tuple contenant les détails d'un mot de passe. Les détails incluent l'ID du mot de passe,
-                le nom du site, le mot de passe déchiffré, le nom d'utilisateur et l'URL du site.
+        Returns:
+            list: Une liste de tuples, chaque tuple contenant les détails d'un mot de passe.
+                  Les détails incluent l'ID du mot de passe, le nom du site, le mot de passe déchiffré,
+                  le nom d'utilisateur et l'URL du site.
         """
+        # Récupérer les données chiffrées depuis la base de données
         res = self.request_db.get_passwords(userID)
-        encrypted = [elt[2] for elt in res]
-        for i in range(len(encrypted)):
-            encrypted[i] = self.chiffrement.decrypt(encrypted[i].decode())
-            res[i] = (res[i][0], res[i][1], encrypted[i], res[i][3], res[i][4])
+
+        # Extraire les textes chiffrés, IVs et tags
+        ciphers = [elt[2] for elt in res]
+        ivs = [elt[5] for elt in res]
+        tags = [elt[6] for elt in res]
+
+        # Déchiffrer les mots de passe
+        for i in range(len(ciphers)):
+            decrypted_password = self.chiffrement.decrypt(ivs[i], ciphers[i], tags[i])
+            res[i] = (res[i][0], res[i][1], decrypted_password.decode('utf-8'), res[i][3], res[i][4])
         return res
 
     def delete_password(self, password_id):
@@ -119,14 +127,13 @@ class PassController:
         """
         self.request_db.delete_password(password_id)
 
-    def createChiffrement(self, password):
+    def createChiffrement(self, master_password):
         """
             Cette méthode crée un objet de chiffrement avec le mot de passe fourni.
 
             L'objet de chiffrement est utilisé pour chiffrer et déchiffrer les données.
 
             Args:
-                password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
+                master_password (str): Le mot de passe utilisé pour créer l'objet de chiffrement.
         """
-        key = bytes.fromhex(password)
-        self.chiffrement = Chiffrement(key)
+        self.chiffrement = Chiffrement(master_password)
