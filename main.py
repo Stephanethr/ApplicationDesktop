@@ -103,11 +103,11 @@ class Main:
         self.logout_password.grid(row=1, column=1, pady=5)
 
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
-                                          command=self.register_password_func)
+                                            command=self.register_password_func)
         self.register_password.grid(row=2, column=0, pady=5)
 
         self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
-                                            command=self.display_password_func)
+                                           command=self.display_password_func)
         self.display_password.grid(row=3, column=0, pady=5)
         """     TODO
 
@@ -137,6 +137,8 @@ class Main:
             {"name": "Des chiffres [123...]", "value": 3},
             {"name": "Des caractères spéciaux", "value": 4}
         ]
+
+        self.choices = set()
 
         # Met à jour les choix en vidant d'abord l'ensemble `self.choices`,
         # puis en ajoutant les valeurs des options cochées.
@@ -180,7 +182,6 @@ class Main:
                 messagebox.showerror("Erreur", "Veuillez entrer des valeurs numériques valides.")
         else:
             messagebox.showerror("Erreur", "Veuillez sélectionner au moins un choix.")
-
 
     def register_password_func(self):
         # Frame pour l'enregistrement du mot de passe
