@@ -1,4 +1,4 @@
-# PassGuardian V0
+# PassGuardian V2
 
 Un gestionnaire de mots de passe simple et sécurisé.
 
@@ -11,7 +11,7 @@ Un gestionnaire de mots de passe simple et sécurisé.
 ## Comment utiliser
 
 1. Exécutez le fichier main.py.
-2. Suivre les instructions affichées dans le terminal.
+2. L'application s'ouvre.
 
 ## Auteurs
 
