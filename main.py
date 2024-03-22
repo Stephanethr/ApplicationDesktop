@@ -212,7 +212,10 @@ class Main:
                     'password_length': password_length
                 }
                 result = self.controller.generate_password(answers)
-                self.result_label.config(text=result)
+                if not result:
+                    messagebox.showerror("Erreur", "La taille du mot de passe doit être entre 8 et 30")
+                else:
+                    self.result_label.config(text=result)
             except ValueError:
                 messagebox.showerror("Erreur", "Veuillez entrer des valeurs numériques valides.")
         else:
