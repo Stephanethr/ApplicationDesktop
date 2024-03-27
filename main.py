@@ -19,7 +19,7 @@ class Main:
         self.create_connect_menu()
         width = self.root.winfo_screenwidth()
         height = self.root.winfo_screenheight()
-        self.root.geometry("%dx%d" % (width // 2, height // 2))
+        self.root.geometry("%dx%d+%d+%d" % (width // 2, height // 2, width // 4, height // 4))
 
     def check_os_theme(self):
         """Checks DARK/LIGHT mode of Windows."""
