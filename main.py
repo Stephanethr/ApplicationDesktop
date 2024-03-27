@@ -158,9 +158,12 @@ class Main:
         result_frame = ttk.Frame(self.generate_frame, padding=5)
         result_frame.grid(row=1, column=0, pady=10, columnspan=3, sticky=tk.W + tk.E)
 
-        # Label pour afficher le résultat dans le cadre avec le texte en noir
+        # Label pour le texte "Voici votre mot de passe : "
+        ttk.Label(result_frame, text="Voici votre mot de passe : ").pack(side='left')
+
+        # Label pour afficher le résultat (le mot de passe généré)
         self.result_label = ttk.Label(result_frame, text="", anchor='w')
-        self.result_label.pack(side='left')  # Utilisez side='left' pour placer le texte à gauche dans le cadre
+        self.result_label.pack(side='left')  # Utilisez side='left' pour placer le mot de passe à droite dans le cadre
 
         # Liste des options de choix avec leur nom et leur valeur
         options = [
