@@ -79,8 +79,14 @@ class Main:
         self.register_button.grid(row=3, column=0, columnspan=2, pady=(2, 10), padx=10,
                                   sticky="ew")
 
+        self.register_button = ttk.Button(self.connect_frame, text="Fermer l'application", command=self.close_root)
+        self.register_button.grid(row=4, column=0, columnspan=2, pady=(2, 10), padx=10, sticky="ew")
+
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
+
+    def close_root(self):
+        self.root.destroy()
 
     def login(self):
         username = self.username_entry.get()
@@ -177,6 +183,10 @@ class Main:
         self.delete_password.grid(row=4, column=0, pady=5)"""
 
     def generate_password_menu(self):
+
+        if hasattr(self, "main_menu_frame"):
+            self.main_menu_frame.destroy()
+
         self.generate_frame = ttk.Frame(self.root, padding="20")
         self.generate_frame.grid(row=0, column=0)
 
@@ -255,6 +265,10 @@ class Main:
             messagebox.showerror("Erreur", "Veuillez sélectionner au moins un choix.")
 
     def register_password_func(self):
+
+        if hasattr(self, "main_menu_frame"):
+            self.main_menu_frame.destroy()
+
         # Frame pour l'enregistrement du mot de passe
         register_password_frame = ttk.Frame(self.root, padding="20")
         register_password_frame.grid(row=0, column=0)
@@ -311,6 +325,10 @@ class Main:
         self.main_menu_page()
 
     def display_password_func(self):
+
+        if hasattr(self, "main_menu_frame"):
+            self.main_menu_frame.destroy()
+
         # Frame pour l'enregistrement du mot de passe
         display_password_frame = ttk.Frame(self.root, padding="20")
         display_password_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
