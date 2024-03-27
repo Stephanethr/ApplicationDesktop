@@ -17,7 +17,6 @@ class Main:
         self.root.title("PassGuardian")
         self.create_connect_menu()
 
-
     def check_os_theme(self):
         """Checks DARK/LIGHT mode of Windows."""
         try:
@@ -43,14 +42,13 @@ class Main:
             """Checks DARK/LIGHT mode of macos."""
             cmd = 'defaults read -g AppleInterfaceStyle'
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, shell=True)
+                                 stderr=subprocess.PIPE, shell=True)
 
             check = bool(p.communicate()[0])
             if check:
                 return "dark"
             else:
                 return "light"
-
 
     def create_connect_menu(self):
         self.connect_frame = ttk.Frame(self.root, padding="20")
@@ -264,7 +262,15 @@ class Main:
                                                                                    site_entry.get(),
                                                                                    self.user[0],
                                                                                    register_password_frame))
-        save_button.grid(row=4, columnspan=2, pady=10)
+        save_button.grid(row=4, column=0, padx=(0, 10), pady=10, sticky=tk.E)
+
+        close_button = ttk.Button(register_password_frame, text="Retour",
+                                  command=lambda: self.close_register_password_func(register_password_frame))
+        close_button.grid(row=4, column=1, padx=(0, 10), pady=10, sticky=tk.E)
+
+    def close_register_password_func(self, frame):
+        frame.destroy()
+        self.main_menu_page()
 
     def save_and_return_to_main_menu(self, login, password, category, site, user_id, frame):
         self.controller.save_password(login, password, category, site, user_id)
@@ -272,7 +278,7 @@ class Main:
         self.main_menu_page()
 
     def display_password_func(self):
-        # Frame pour l'enregistrement du mot de passe
+        # Frame pour l'affichage des mots de passe
         display_password_frame = ttk.Frame(self.root, padding="20")
         display_password_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
@@ -281,15 +287,25 @@ class Main:
 
         # Afficher les mots de passe dans la frame
         for i, password in enumerate(passwords, start=1):
-            ttk.Label(display_password_frame, text=f"Login: {password[1]}").grid(row=i, column=0, sticky=tk.W)
-            ttk.Label(display_password_frame, text=f"Mot de passe: {password[2]}").grid(row=i, column=1, sticky=tk.W)
-            ttk.Label(display_password_frame, text=f"Catégorie: {password[3]}").grid(row=i, column=2, sticky=tk.W)
-            ttk.Label(display_password_frame, text=f"Site: {password[4]}").grid(row=i, column=3, sticky=tk.W)
+            ttk.Label(display_password_frame, text="Login: ").grid(row=i, column=0, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"{password[1]}").grid(row=i, column=1, sticky=tk.W)
+
+            ttk.Label(display_password_frame, text="   ").grid(row=i, column=2)  # Ajout d'un espace
+            ttk.Label(display_password_frame, text="Mot de passe: ").grid(row=i, column=3, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"{password[2]}").grid(row=i, column=4, sticky=tk.W)
+
+            ttk.Label(display_password_frame, text="   ").grid(row=i, column=5)  # Ajout d'un espace
+            ttk.Label(display_password_frame, text="Catégorie: ").grid(row=i, column=6, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"{password[3]}").grid(row=i, column=7, sticky=tk.W)
+
+            ttk.Label(display_password_frame, text="   ").grid(row=i, column=8)  # Ajout d'un espace
+            ttk.Label(display_password_frame, text="Site: ").grid(row=i, column=9, sticky=tk.W)
+            ttk.Label(display_password_frame, text=f"{password[4]}").grid(row=i, column=10, sticky=tk.W)
 
         # Bouton pour retourner au menu principal
         close_button = ttk.Button(display_password_frame, text="Retour au menu principal",
                                   command=lambda: self.close_display_password_frame(display_password_frame))
-        close_button.grid(row=len(passwords) + 1, columnspan=4, pady=10)
+        close_button.grid(row=len(passwords) + 1, columnspan=11, pady=10)
 
     def close_display_password_frame(self, frame):
         frame.destroy()
