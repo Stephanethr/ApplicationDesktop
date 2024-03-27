@@ -285,7 +285,6 @@ class Main:
         self.main_menu_page()
 
     def display_password_func(self):
-        show_password = False
         # Frame pour l'enregistrement du mot de passe
         display_password_frame = ttk.Frame(self.root, padding="20")
         display_password_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
@@ -298,18 +297,45 @@ class Main:
         for i, header in enumerate(headers):
             ttk.Label(display_password_frame, text=header.ljust(20)).grid(row=0, column=i, sticky=tk.W)
 
+        # Fonction pour afficher le mot de passe en clair ou le masquer
+        def show_password_clear(label, password):
+            if label.cget("text") == password:
+                label.config(text="*" * len(password))
+            else:
+                label.config(text=password)
+
         # Afficher les mots de passe dans le tableau
         for i, password in enumerate(passwords, start=1):
-            ttk.Label(display_password_frame, text=password[1].ljust(20)).grid(row=i, column=0, sticky=tk.W)
-            ttk.Label(display_password_frame, text=password[3].ljust(20)).grid(row=i, column=1, sticky=tk.W)
-            ttk.Label(display_password_frame, text=password[4].ljust(20)).grid(row=i, column=2, sticky=tk.W)
-            ttk.Label(display_password_frame, text=password[2].ljust(20)).grid(row=i, column=3, sticky=tk.W)
-            ttk.Button(display_password_frame, text="Copier", command=lambda p=password[2]: self.copy_password_2(p)).grid(
-                row=i, column=4, padx=5)
+            login_label = ttk.Label(display_password_frame, text=password[1].ljust(20))
+            login_label.grid(row=i, column=0, sticky=tk.W)
+
+            category_label = ttk.Label(display_password_frame, text=password[3].ljust(20))
+            category_label.grid(row=i, column=1, sticky=tk.W)
+
+            site_label = ttk.Label(display_password_frame, text=password[4].ljust(20))
+            site_label.grid(row=i, column=2, sticky=tk.W)
+
+            password_label = ttk.Label(display_password_frame, text="*" * len(password[2]))
+            password_label.grid(row=i, column=3, sticky=tk.W)
+
+            # Bouton "Afficher" pour afficher ou masquer le mot de passe
+            show_button = ttk.Button(display_password_frame, text="Afficher",
+                                     command=lambda label=password_label, pw=password[2]: show_password_clear(label,
+                                                                                                              pw))
+            show_button.grid(row=i, column=4, padx=5)
+
+            ttk.Button(display_password_frame, text="Copier",
+                       command=lambda p=password[2]: self.copy_password_2(p)).grid(
+                row=i, column=5, padx=5)
             ttk.Button(display_password_frame, text="Supprimer",
                        command=lambda id=password[0]: self.delete_password(id, display_password_frame)).grid(row=i,
-                                                                                                           column=6,
-                                                                                                           padx=5)
+                                                                                                             column=6,
+                                                                                                             padx=5)
+
+        # Bouton pour retourner au menu principal
+        close_button = ttk.Button(display_password_frame, text="Retour au menu principal",
+                                  command=lambda: self.close_display_password_frame(display_password_frame))
+        close_button.grid(row=len(passwords) + 1, columnspan=7, pady=10)
 
         # Bouton pour retourner au menu principal
         close_button = ttk.Button(display_password_frame, text="Retour au menu principal",
