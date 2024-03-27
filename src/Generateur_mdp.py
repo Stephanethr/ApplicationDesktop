@@ -43,9 +43,9 @@ class Generateur:
         }
 
         mot_de_passe = ''
-        resultats_test = self.nombre_aleatoire(caractere_voulu)
+        resultats = self.nombre_aleatoire(caractere_voulu)
 
-        for i, nombre in enumerate(resultats_test):
+        for i, nombre in enumerate(resultats):
             caracteres_possibles = conditions[caractere_voulu[i]]
             mot_de_passe += ''.join(random.choices(caracteres_possibles, k=nombre))
 

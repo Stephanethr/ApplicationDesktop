@@ -9,6 +9,7 @@ import sv_ttk
 
 
 class Main:
+
     def __init__(self):
         self.choices = None
         self.controller = Controller()
@@ -16,6 +17,9 @@ class Main:
         self.root = tk.Tk()
         self.root.title("PassGuardian")
         self.create_connect_menu()
+        width = self.root.winfo_screenwidth()
+        height = self.root.winfo_screenheight()
+        self.root.geometry("%dx%d" % (width // 2, height // 2))
 
     def check_os_theme(self):
         """Checks DARK/LIGHT mode of Windows."""
