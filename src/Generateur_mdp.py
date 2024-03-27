@@ -98,16 +98,16 @@ class Generateur:
 
         # La difference entre la somme de la liste et la longeur du mot de passe pour que le mot de passe ne soit
         # pas supérieur ou inférieur à la taille du mot de passe demandé par l'utilisateur.
-        diffenrece = sum(nbr_aleatoire) - self.longueur_mdp
-        if diffenrece > 0:
+        difference = sum(nbr_aleatoire) - self.longueur_mdp
+        if difference > 0:
             maxi = max(nbr_aleatoire)
             index_maxi = nbr_aleatoire.index(maxi)
-            nbr_aleatoire[index_maxi] = maxi - diffenrece
+            nbr_aleatoire[index_maxi] = maxi - difference
 
-        elif diffenrece < 0:
+        elif difference < 0:
             mini = min(nbr_aleatoire)
             index_min = nbr_aleatoire.index(mini)
-            nbr_aleatoire[index_min] = mini - diffenrece
+            nbr_aleatoire[index_min] = mini - difference
 
         random.shuffle(nbr_aleatoire)
         return nbr_aleatoire

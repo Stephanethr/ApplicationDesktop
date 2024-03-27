@@ -56,23 +56,33 @@ class Main:
 
     def create_connect_menu(self):
         self.connect_frame = ttk.Frame(self.root, padding="20")
-        self.connect_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        self.connect_frame.grid(row=0, column=0, padx=10, pady=10)
 
-        self.username_label = ttk.Label(self.connect_frame, text="Nom d'utilisateur:")
-        self.username_label.grid(row=0, column=0, sticky=tk.W)
+        # Ajout des éléments à l'intérieur du cadre
+        self.username_label = ttk.Label(self.connect_frame, text="Nom d'utilisateur  ")
+        self.username_label.grid(row=0, column=0, sticky=tk.E, pady=(5, 2))  # Ajustement de la valeur de pady
+
         self.username_entry = ttk.Entry(self.connect_frame)
-        self.username_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
+        self.username_entry.grid(row=0, column=1, padx=(0, 10), pady=(5, 2),
+                                 sticky="ew")  # Ajustement de la valeur de pady
 
-        self.password_label = ttk.Label(self.connect_frame, text="Mot de passe:")
-        self.password_label.grid(row=1, column=0, sticky=tk.W)
+        self.password_label = ttk.Label(self.connect_frame, text="Mot de passe  ")
+        self.password_label.grid(row=1, column=0, sticky=tk.E, pady=(5, 2))  # Ajustement de la valeur de pady
+
         self.password_entry = ttk.Entry(self.connect_frame, show="*")
-        self.password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
+        self.password_entry.grid(row=1, column=1, padx=(0, 10), pady=(5, 2),
+                                 sticky="ew")  # Ajustement de la valeur de pady
 
         self.login_button = ttk.Button(self.connect_frame, text="Se connecter", command=self.login)
-        self.login_button.grid(row=2, columnspan=2, pady=10)
+        self.login_button.grid(row=2, column=0, columnspan=2, pady=10, padx=10, sticky="ew")
 
-        self.register_button = ttk.Button(self.connect_frame, text="S'enregistrer", command=self.open_register_page)
-        self.register_button.grid(row=3, columnspan=2, pady=10)
+        self.register_button = ttk.Button(self.connect_frame, text="Créer un compte", command=self.open_register_page)
+        self.register_button.grid(row=3, column=0, columnspan=2, pady=(2, 10), padx=10,
+                                  sticky="ew")  # Ajustement de la valeur de pady
+
+        # Configuration de la grille pour centrer le cadre
+        self.root.grid_rowconfigure(0, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
 
     def login(self):
         username = self.username_entry.get()
@@ -96,14 +106,15 @@ class Main:
         self.register_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
         self.new_username_label = ttk.Label(self.register_frame, text="Votre nom d'utilisateur:")
-        self.new_username_label.grid(row=0, column=0, sticky=tk.W)
+        self.new_username_label.grid(row=0, column=1, sticky=tk.W)
+
         self.new_username_entry = ttk.Entry(self.register_frame)
-        self.new_username_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
+        self.new_username_entry.grid(row=0, column=2, sticky=tk.W, pady=5)
 
         self.new_password_label = ttk.Label(self.register_frame, text="Votre mot de passe:")
-        self.new_password_label.grid(row=1, column=0, sticky=tk.W)
+        self.new_password_label.grid(row=1, column=1, sticky=tk.W)
         self.new_password_entry = ttk.Entry(self.register_frame, show="*")
-        self.new_password_entry.grid(row=1, column=1, sticky=tk.W, pady=5)
+        self.new_password_entry.grid(row=1, column=2, sticky=tk.W, pady=5)
 
         self.register_button = ttk.Button(self.register_frame, text="S'enregistrer", command=self.register)
         self.register_button.grid(row=2, columnspan=2, pady=10)
