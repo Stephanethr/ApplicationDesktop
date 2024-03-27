@@ -379,8 +379,14 @@ class Main:
         self.generate_frame.destroy()
         self.main_menu_page()
 
+    def return_to_connect_menu(self):
+        # Fermez tous les autres frames actifs
+        self.main_menu_frame.destroy()  # Supprimez le frame du menu principal s'il est ouvert
+        # Reconstruisez le menu de connexion
+        self.create_connect_menu()
+
     def logout_password_func(self):
-        self.root.destroy()
+        self.return_to_connect_menu()
 
     def run(self):
         print(self.check_os_theme())
