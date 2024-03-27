@@ -9,6 +9,7 @@ import sv_ttk
 
 
 class Main:
+
     def __init__(self):
         self.choices = None
         self.controller = Controller()
@@ -16,7 +17,9 @@ class Main:
         self.root = tk.Tk()
         self.root.title("PassGuardian")
         self.create_connect_menu()
-
+        width = self.root.winfo_screenwidth()
+        height = self.root.winfo_screenheight()
+        self.root.geometry("%dx%d" % (width // 2, height // 2))
 
     def check_os_theme(self):
         """Checks DARK/LIGHT mode of Windows."""
@@ -43,14 +46,13 @@ class Main:
             """Checks DARK/LIGHT mode of macos."""
             cmd = 'defaults read -g AppleInterfaceStyle'
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, shell=True)
+                                 stderr=subprocess.PIPE, shell=True)
 
             check = bool(p.communicate()[0])
             if check:
                 return "dark"
             else:
                 return "light"
-
 
     def create_connect_menu(self):
         self.connect_frame = ttk.Frame(self.root, padding="20")
@@ -160,9 +162,12 @@ class Main:
         result_frame = ttk.Frame(self.generate_frame, padding=5)
         result_frame.grid(row=1, column=0, pady=10, columnspan=3, sticky=tk.W + tk.E)
 
-        # Label pour afficher le résultat dans le cadre avec le texte en noir
+        # Label pour le texte "Voici votre mot de passe : "
+        ttk.Label(result_frame, text="Voici votre mot de passe : ").pack(side='left')
+
+        # Label pour afficher le résultat (le mot de passe généré)
         self.result_label = ttk.Label(result_frame, text="", anchor='w')
-        self.result_label.pack(side='left')  # Utilisez side='left' pour placer le texte à gauche dans le cadre
+        self.result_label.pack(side='left')  # Utilisez side='left' pour placer le mot de passe à droite dans le cadre
 
         # Liste des options de choix avec leur nom et leur valeur
         options = [
@@ -264,7 +269,15 @@ class Main:
                                                                                    site_entry.get(),
                                                                                    self.user[0],
                                                                                    register_password_frame))
-        save_button.grid(row=4, columnspan=2, pady=10)
+        save_button.grid(row=4, column=0, padx=(0, 10), pady=10, sticky=tk.E)
+
+        close_button = ttk.Button(register_password_frame, text="Retour",
+                                  command=lambda: self.close_register_password_func(register_password_frame))
+        close_button.grid(row=4, column=1, padx=(0, 10), pady=10, sticky=tk.E)
+
+    def close_register_password_func(self, frame):
+        frame.destroy()
+        self.main_menu_page()
 
     def save_and_return_to_main_menu(self, login, password, category, site, user_id, frame):
         self.controller.save_password(login, password, category, site, user_id)
