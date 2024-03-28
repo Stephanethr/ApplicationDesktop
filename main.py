@@ -150,28 +150,37 @@ class Main:
         self.main_menu_frame = ttk.Frame(self.root, padding="20")
         self.main_menu_frame.grid(row=0, column=0)
 
+        # Charger l'image
+        logo_image = tk.PhotoImage(file="assets/logo_passguardian.png")
+
+        logo_image = logo_image.subsample(3)
+
+        logo_label = tk.Label(self.main_menu_frame, image=logo_image)
+        logo_label.grid(row=0, column=0, padx=1, pady=2)
+
         title_style = ttk.Style()
         title_style.configure("Title.TLabel", font=("Helvetica", 24))
 
         self.welcome_label = ttk.Label(self.main_menu_frame, text="PassGuardian", style="Title.TLabel")
-        self.welcome_label.grid(row=0, column=0, columnspan=2, pady=(0, 20))
+        self.welcome_label.grid(row=1, column=0, columnspan=2, pady=(0, 20))
 
         self.generate_button = ttk.Button(self.main_menu_frame, text="Générer un mot de passe",
                                           command=self.generate_password_menu)
-        self.generate_button.grid(row=1, column=0, pady=5, sticky="ew")
+        self.generate_button.grid(row=2, column=0, pady=5, sticky="ew")
 
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                             command=self.register_password_func)
-        self.register_password.grid(row=2, column=0, pady=5, sticky="ew")
+        self.register_password.grid(row=3, column=0, pady=5, sticky="ew")
 
         self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
                                            command=self.display_password_func)
-        self.display_password.grid(row=3, column=0, pady=5, sticky="ew")
+        self.display_password.grid(row=4, column=0, pady=5, sticky="ew")
 
         self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
                                           command=self.logout_password_func)
-        self.logout_password.grid(row=4, column=0, pady=5, sticky="ew")
+        self.logout_password.grid(row=5, column=0, pady=5, sticky="ew")
 
+        logo_label.image = logo_image
         # Configuration de la grille pour centrer le cadre
         self.root.grid_rowconfigure(0, weight=1)
         self.root.grid_columnconfigure(0, weight=1)
