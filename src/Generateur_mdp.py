@@ -55,59 +55,22 @@ class Generateur:
 
         return mot_de_passe
 
-    def nombre_aleatoire(self, liste_choix_utilisateur: list[int]) -> list[int]:
-        """
-        Génère une liste de nombres aléatoires basée sur la taille de la liste de choix de l'utilisateur.
+    def nombre_aleatoire(self, choix_utilisateur: list[int]) -> list[int]:
+        nombres_aleatoires = []
+        reste_iterations = len(choix_utilisateur) - 1
+        longueur_restante = self.longueur_mdp - reste_iterations
 
-        Méthode qui génère une liste de nombres aléatoires en fonction de la taille de la liste de choix de
-        l'utilisateur.
-        Les nombres aléatoires générés sont utilisés pour déterminer la répartition des caractères dans le mot de passe.
+        for _ in range(len(choix_utilisateur)):
+            valeur_aleatoire = random.randint(1, longueur_restante)
+            nombres_aleatoires.append(valeur_aleatoire)
+            reste_iterations -= 1
+            reste = self.longueur_mdp - sum(nombres_aleatoires)
+            longueur_restante = reste - reste_iterations
 
-        :param liste_choix_utilisateur: Liste d'entiers représentant les choix de l'utilisateur.
-        :type liste_choix_utilisateur: list[int]
-        :return: Liste de nombres aléatoires.
-        :rtype: list[int]
+        if sum(nombres_aleatoires) < self.longueur_mdp:
+            value = random.choice(nombres_aleatoires)
+            index = nombres_aleatoires.index(value)
+            nombres_aleatoires[index] = value + (self.longueur_mdp - sum(nombres_aleatoires))
 
-        """
-        reste_longueur_mdp = self.longueur_mdp
-        nbr_aleatoire = []
-        nbr_rand = 0
-        nbr_valeur = len(liste_choix_utilisateur)
-
-        while len(nbr_aleatoire) < nbr_valeur:
-            if reste_longueur_mdp > 1:
-
-                # 'reste_longueur_mdp' est le reste de la place qu'il reste dans le mot de passe pour
-                # que le random ensuite ne soit pas trop grand
-                nbr_rand = random.randint(1, reste_longueur_mdp)
-                nbr_aleatoire.append(nbr_rand)
-                reste_longueur_mdp = reste_longueur_mdp - nbr_rand
-            else:
-                # Évite l'erreur de plage invalide de randint (randint ne peut avoir une plage de 1, 1)
-                # on fait une division entière de la valeur max de la liste par un random allant de 2 à max - 1
-                # pour éviter que la variable 'nouvelle_valeur' soit égale à elle-même ou à un.
-                reste_longueur_mdp += 1
-                maxi = max(nbr_aleatoire)
-                nouvelle_valeur = maxi // random.randint(2, maxi - 1)
-
-                # Trouve l'index de la valeur max de la liste et soustrait la valeur 'nouvelle_valeur' à
-                # maxi puis ajoute la nouvelle valeur à la liste.
-                index_maxi = nbr_aleatoire.index(maxi)
-                nbr_aleatoire[index_maxi] = maxi - nouvelle_valeur
-                nbr_aleatoire.append(nouvelle_valeur)
-
-        # La difference entre la somme de la liste et la longeur du mot de passe pour que le mot de passe ne soit
-        # pas supérieur ou inférieur à la taille du mot de passe demandé par l'utilisateur.
-        difference = sum(nbr_aleatoire) - self.longueur_mdp
-        if difference > 0:
-            maxi = max(nbr_aleatoire)
-            index_maxi = nbr_aleatoire.index(maxi)
-            nbr_aleatoire[index_maxi] = maxi - difference
-
-        elif difference < 0:
-            mini = min(nbr_aleatoire)
-            index_min = nbr_aleatoire.index(mini)
-            nbr_aleatoire[index_min] = mini - difference
-
-        random.shuffle(nbr_aleatoire)
-        return nbr_aleatoire
+        random.shuffle(nombres_aleatoires)
+        return nombres_aleatoires
