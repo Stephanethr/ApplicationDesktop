@@ -38,8 +38,10 @@ class Chiffrement:
     L'IV (initialisation Vector) est un bloc de données aléatoires qui est utilisé en conjonction avec
     la clé de chiffrement pour garantir l'unicité de la sortie chiffrée,
     même si le même texte clair est chiffré plusieurs fois avec la même clé. 
-    L'utilisation d'un IV empêche qu'un même texte ne produise le même
-    texte chiffré à chaque fois.
+    L'utilisation d'un IV empêche qu'un même texte chiffré ne produise le même
+    résultat à chaque fois.
+    
+    Le Tag permet d'authentifier le mot de passe chiffré. 
     """
     def encrypt_password(self, plaintext):
         """
