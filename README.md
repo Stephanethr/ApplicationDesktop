@@ -1,8 +1,13 @@
+<div align="center">
+
 # PassGuardian V2
 
 ![alt text](./assets/logo_passguardian.png)
 
 Un gestionnaire de mots de passe simple et sécurisé.
+
+</div>
+
 
 ## Fonctionnalités
 
