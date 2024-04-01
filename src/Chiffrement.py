@@ -3,6 +3,7 @@ from cryptography.hazmat.primitives import hashes, padding
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
+
 class Chiffrement:
     def __init__(self, password):
         """
