@@ -164,21 +164,17 @@ class Main:
         self.welcome_label = ttk.Label(self.main_menu_frame, text="PassGuardian", style="Title.TLabel")
         self.welcome_label.grid(row=1, column=0, columnspan=2, pady=(0, 20))
 
-        self.generate_button = ttk.Button(self.main_menu_frame, text="Générer un mot de passe",
-                                          command=self.generate_password_menu)
-        self.generate_button.grid(row=2, column=0, pady=5, sticky="ew")
-
         self.register_password = ttk.Button(self.main_menu_frame, text="Enregistrer un mot de passe",
                                             command=self.register_password_func)
-        self.register_password.grid(row=3, column=0, pady=5, sticky="ew")
+        self.register_password.grid(row=2, column=0, pady=5, sticky="ew")
 
         self.display_password = ttk.Button(self.main_menu_frame, text="Voir les mots de passe enregistrés",
                                            command=self.display_password_func)
-        self.display_password.grid(row=4, column=0, pady=5, sticky="ew")
+        self.display_password.grid(row=3, column=0, pady=5, sticky="ew")
 
         self.logout_password = ttk.Button(self.main_menu_frame, text="Se déconnecter",
                                           command=self.logout_password_func)
-        self.logout_password.grid(row=5, column=0, pady=5, sticky="ew")
+        self.logout_password.grid(row=4, column=0, pady=5, sticky="ew")
 
         logo_label.image = logo_image
         # Configuration de la grille pour centrer le cadre
@@ -192,19 +188,17 @@ class Main:
         self.delete_password.grid(row=4, column=0, pady=5)"""
 
     def generate_password_menu(self):
+        # Créer une nouvelle fenêtre Toplevel pour afficher l'interface graphique
+        generate_window = tk.Toplevel(self.root)
+        generate_window.title("Générer un mot de passe")
 
-        if hasattr(self, "main_menu_frame"):
-            self.main_menu_frame.destroy()
-
-        self.generate_frame = ttk.Frame(self.root, padding="20")
+        self.generate_frame = ttk.Frame(generate_window, padding="20")
         self.generate_frame.grid(row=0, column=0)
 
         result_frame = ttk.Frame(self.generate_frame, padding=5)
-        result_frame.grid(row=1, column=0, pady=20, columnspan=3,
-                          sticky=tk.W + tk.E)
+        result_frame.grid(row=1, column=0, pady=20, columnspan=3, sticky=tk.W + tk.E)
 
         ttk.Label(result_frame, text="Mot de passe : ").pack(side='left')
-
         self.result_label = ttk.Label(result_frame, text="", anchor='w')
         self.result_label.pack(side='left')
 
@@ -217,43 +211,33 @@ class Main:
 
         self.choices = set()
 
-        # Met à jour les choix en vidant d'abord l'ensemble `self.choices`,
-        # puis en ajoutant les valeurs des options cochées.
         def update_choices():
             self.choices.clear()
             for opt in options:
                 if opt["value"] in choice_vars and choice_vars[opt["value"]].get() == 1:
                     self.choices.add(opt["value"])
 
-        # Crée un dictionnaire de variables de case à cocher avec les options, et associe chaque variable à une
-        # case à cocher dans la fenêtre tkinter.
-        # Lorsqu'une case à cocher est cochée ou décochée, la fonction `update_choices` est appelée pour mettre
-        # à jour les choix.
         choice_vars = {}
         for i, option in enumerate(options):
             choice_vars[option["value"]] = tk.IntVar()
             ttk.Checkbutton(self.generate_frame, text=option["name"], variable=choice_vars[option["value"]], onvalue=1,
-                            offvalue=0, command=update_choices).grid(row=i + 2, column=0, sticky=tk.W,
-                                                                     pady=5)
+                            offvalue=0, command=update_choices).grid(row=i + 2, column=0, sticky=tk.W, pady=5)
 
         ttk.Label(self.generate_frame, text="Nombre de caractères  ").grid(row=len(options) + 2, column=0, sticky=tk.W)
         self.password_length_entry = ttk.Entry(self.generate_frame)
-        self.password_length_entry.grid(row=len(options) + 2, column=1, sticky=tk.W,
-                                        pady=5)
+        self.password_length_entry.grid(row=len(options) + 2, column=1, sticky=tk.W, pady=5)
 
-        close_button = ttk.Button(self.generate_frame, text="Retour", command=self.close_generate_password_menu)
-        close_button.grid(row=len(options) + 3, column=0, sticky=tk.W, pady=15,
-                          padx=(0, 5))
+        close_button = ttk.Button(self.generate_frame, text="Retour", command=generate_window.destroy)
+        close_button.grid(row=len(options) + 3, column=0, sticky=tk.W, pady=15, padx=(0, 5))
 
         copy_button = ttk.Button(self.generate_frame, text="Copier", command=self.copy_password)
-        copy_button.grid(row=1, column=0, columnspan=3, sticky=tk.E, pady=15,
-                         padx=(5, 0))
+        copy_button.grid(row=1, column=0, columnspan=3, sticky=tk.E, pady=15, padx=(5, 0))
 
         ok_button = ttk.Button(self.generate_frame, text="Confirmer", command=self.selection)
         ok_button.grid(row=len(options) + 3, column=2, sticky=tk.E, pady=10, padx=(5, 0))
 
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
+        generate_window.grid_rowconfigure(0, weight=1)
+        generate_window.grid_columnconfigure(0, weight=1)
 
     def selection(self):
         if self.choices:
@@ -283,7 +267,7 @@ class Main:
         register_password_frame.grid(row=0, column=0)
 
         # Label et champs pour le login
-        login_label = ttk.Label(register_password_frame, text="Login  ")
+        login_label = ttk.Label(register_password_frame, text="Utilisateur  ")
         login_label.grid(row=0, column=0, sticky=tk.W, pady=5)
         login_entry = ttk.Entry(register_password_frame)
         login_entry.grid(row=0, column=1, sticky=tk.W, pady=5)
@@ -305,6 +289,10 @@ class Main:
         site_label.grid(row=3, column=0, sticky=tk.W, pady=5)
         site_entry = ttk.Entry(register_password_frame)
         site_entry.grid(row=3, column=1, sticky=tk.W, pady=5)
+
+        generate_button = ttk.Button(register_password_frame, text="Générer",
+                                          command=self.generate_password_menu)
+        generate_button.grid(row=1, column=2, padx=10, sticky="ew")
 
         # Bouton pour enregistrer le mot de passe
         save_button = ttk.Button(register_password_frame, text="Enregistrer",
