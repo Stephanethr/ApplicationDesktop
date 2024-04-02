@@ -38,9 +38,9 @@ En plus du chiffrement, GCM génère également un tag d'authentification pour c
 1. Exécutez le fichier main.py.
 2. L'application s'ouvre.
 3. Créez un compte ou connectez-vous.
-![alt text](./assets/page_connexion.png)
+![alt text](documents/page_connexion.png)
 4. Vous pouvez maintenant ajouter des mots de passe, les afficher ou les supprimer.
-![alt text](./assets/page_accueil.png)
+![alt text](documents/page_accueil.png)
 
 
 ## Auteurs
