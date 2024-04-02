@@ -4,33 +4,33 @@ from src.Generateur_mdp import Generateur
 
 
 class Controller:
+    MAX_LONGUEUR_MDP = 30
+    MIN_LONGUEUR_MDP = 8
+
     def __init__(self):
-        self.user_inputs = {}
         self.generation = Generateur()
         self.chiffrement = None
         self.request_db = Request()
 
-    def generate_password(self, answers):
+    def generate_password(self, answers: dict) -> str or bool:
         """
-            Cette méthode génère un mot de passe en fonction des réponses de l'utilisateur.
+        Génère un mot de passe en fonction des réponses fournies.
 
-            Les réponses de l'utilisateur sont stockées dans une liste. Ensuite, la méthode vérifie si la longueur du mot de passe
-            et les options de mot de passe fournies par l'utilisateur sont valides. Si elles sont valides, un mot de passe est généré
-            et renvoyé.
+        Teste la validité de la longueur du mot de passe spécifiée par l'utilisateur.
+        Si la longueur spécifiée n'est pas comprise entre les valeurs minimale et maximale définies dans la classe,
+        retourne False. Sinon, utilise la classe Generation pour générer un mot de passe.
 
-            Args:
-                answers (dict): Un dictionnaire contenant les réponses de l'utilisateur. Il doit contenir les clés 'password_length',
-                'password_options' et 'password_count'.
-
-            Returns:
-                str: Le mot de passe généré si les entrées de l'utilisateur sont valides. Sinon, None est renvoyé.
+        :param answers: Dictionnaire contenant les réponses de l'utilisateur, notamment la longueur et les options du mot de passe.
+        :type answers: dict
+        :return: Mot de passe généré ou False si la longueur spécifiée est invalide.
+        :rtype: str or bool
         """
-        self.user_inputs = answers
-        if (self.generation.longueur_valide(self.user_inputs['password_length']) &
-                self.generation.choix_utilisateur(self.user_inputs['password_options'])):
-
-            mdp_genere = self.generation.generation_mdp()
-            return mdp_genere
+        if answers['password_length'] < self.MIN_LONGUEUR_MDP or answers['password_length'] > self.MAX_LONGUEUR_MDP:
+            mdp_genere = False
+        else:
+            self.generation.set_longueur_mdp(answers['password_length'])
+            mdp_genere = self.generation.generation(answers['password_options'])
+        return mdp_genere
 
     def create_user(self, username, master_password):
         """
@@ -41,7 +41,7 @@ class Controller:
                 master_password (str) : Le mot de passe pour le nouvel utilisateur.
 
             Returns :
-                User : L'utilisateur créé, ou 1 si un utilisateur avec le même nom d'utilisateur existe déjà.
+                User : L'utilisateur créé, ou None si un utilisateur avec le même nom d'utilisateur existe déjà.
 
         """
         already_exist = self.request_db.verify_user_exist(username)
